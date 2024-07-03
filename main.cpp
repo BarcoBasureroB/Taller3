@@ -5,18 +5,94 @@
 
 using namespace std;
 
+Transaccion* busquedaRec(Transaccion* &raiz, int datoABuscar)
+{
+    if(!raiz)
+    {
+        return nullptr;
+    }
 
-void crearTransaccion(vector<Transaccion*> &transacciones)
+    if(raiz->id == datoABuscar)
+    {
+        return raiz;
+    }
+
+    if(raiz->id > datoABuscar)
+    {
+        return busquedaRec(raiz->hijoIzq,datoABuscar);
+    }
+    return busquedaRec(raiz->hijoDer,datoABuscar);
+}
+
+void inOrdenRecursivo(Transaccion* &raiz)
+{
+    if(raiz == nullptr){
+        return;
+    }
+    
+    inOrdenRecursivo(raiz->hijoIzq);
+    cout<<raiz->id<<"";
+    inOrdenRecursivo(raiz->hijoDer);
+}
+
+void crearTransaccion(Transaccion* &raiz)
 {
 
 }
 
-void RevisarTransacciones(vector<Transaccion*> &transacciones)
+void RevisarTransacciones(Transaccion* &raiz)
 {
+    int opcion;
 
+    do{
+        cout<<"IDs en el sistema:"<<endl;
+        inOrdenRecursivo(raiz);
+
+        int IDBuscar;
+        cout<<"Ingresa el ID de Transacción:"<<endl;
+        cin>>IDBuscar;
+
+        Transaccion* encontrada = busquedaRec(raiz, IDBuscar);
+
+        if(encontrada != nullptr)
+        {
+            cout<<"Datos de Transacción:"<<endl;
+            cout<<"ID: "<<encontrada->id<<endl;
+            cout<<"RUT de origen: "<<encontrada->rutOrigen<<endl;
+            cout<<"RUT de destino: "<<encontrada->rutFinal<<endl;
+            cout<<"Monto recibido: "<<encontrada->monto<<endl;
+            cout<<"Ubicación de Transferencia: "<<encontrada->ubicacion<<endl;
+            cout<<"Fecha de Transacción: "<<encontrada->fecha<<endl;
+            cout<<"Hora de Transacción: "<<encontrada->hora<<endl;
+        
+        }
+        else
+        {
+            cout<<"El Id ingresado no es correcto."<<endl;
+        }
+        
+        do
+        {
+            cout<<"¿Desea finalizar la revisión de Tranferencias?( 1)Si  2)No ): "<<endl;
+            cin>>opcion;
+            switch(opcion)
+            {
+                case 1:
+                    cout<<"Volviendo al Menú..."<<endl;
+                    break;
+                case 2:
+                    cout<<" "<<endl;
+                    break;
+                default:
+                    cout << "Opción no válida. Por favor, ingrese una opción válida.\n";
+        
+            }
+        }while(opcion != 1 && opcion != 2);
+
+    }while(opcion != 1);
 }
 
-int menu(vector<Transaccion*> &transacciones)
+int menu(Transaccion* &raiz)
 {
     int opcion;
 
@@ -31,10 +107,10 @@ int menu(vector<Transaccion*> &transacciones)
         cout<<endl;
         switch(opcion) {
             case 1:
-                crearTransaccion(transacciones);
+                crearTransaccion(raiz);
                 break;
             case 2:
-                RevisarTransacciones(transacciones);
+                RevisarTransacciones(raiz);
                 break;
             case 3:
                 

@@ -4,7 +4,7 @@
 #include "Transaccion.h"
 
 
-Transaccion::Transaccion(string id, string rutOrigen, string rutFinal, int monto, string ubicacion, string fechaYHora)
+Transaccion::Transaccion(int id, string rutOrigen, string rutFinal, int monto, string ubicacion, string fecha, int hora)
 {
 
     this ->id = id;
@@ -12,7 +12,10 @@ Transaccion::Transaccion(string id, string rutOrigen, string rutFinal, int monto
     this ->rutFinal = rutFinal;
     this ->monto = monto;
     this ->ubicacion = ubicacion;
-    this ->fechaYHora = fechaYHora;
+    this ->fecha = fecha;
+    this ->hora = hora;
+    this->hijoIzq = nullptr;
+    this->hijoDer = nullptr;
 
 }
 

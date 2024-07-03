@@ -7,18 +7,17 @@ using namespace std;
 
 class Transaccion
 {
-     private:
-        string id;
+    public:
         string rutOrigen;
         string rutFinal;
         int monto;
         string ubicacion;
-        string fechaYHora;
-
-
-    public:
-        Transaccion(string, string, string, int, string, string);
+        string fecha;
+        int hora;
+        int id;
+        Transaccion* hijoIzq;
+        Transaccion* hijoDer;
+        Transaccion(int, string, string, int, string, string, int);
         ~Transaccion();
-
 };
 
