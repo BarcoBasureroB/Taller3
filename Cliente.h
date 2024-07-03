@@ -11,7 +11,8 @@ class Cliente
     public:
         string rut;
         vector<Transaccion*> listaSospechosa;
+        vector<Transaccion*> listaTransac;
 
-        Cliente(string,vector<Transaccion*>&);
+        Cliente(string,vector<Transaccion*>&,vector<Transaccion*>&);
         ~Cliente();
 };

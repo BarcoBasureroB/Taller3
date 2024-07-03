@@ -151,7 +151,9 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
     }
 }
 
-void crearTransaccion(Transaccion* &raiz)
+
+
+void crearTransaccion(Transaccion* &raiz, vector<Cliente*> &clientes)
 {
     int id = crearIDRandom(raiz);
     string rutOrigen, rutDestino, ubicacion;
@@ -243,7 +245,7 @@ int menu(Transaccion* &raiz, vector<Cliente*> &clientes)
         cout<<endl;
         switch(opcion) {
             case 1:
-                crearTransaccion(raiz);
+                crearTransaccion(raiz, clientes);
                 break;
             case 2:
                 revisarTransacciones(raiz);
