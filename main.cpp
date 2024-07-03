@@ -36,6 +36,8 @@ void inOrdenRecursivo(Transaccion* &raiz)
     inOrdenRecursivo(raiz->hijoDer);
 }
 
+
+
 int crearIDRandom(Transaccion* &raiz)
 {   
     bool existe = false;
@@ -53,6 +55,12 @@ int crearIDRandom(Transaccion* &raiz)
     }while(existe != false);
 
     return id;
+}
+
+void transaccionesSospechosas(vector<Cliente*> &clientes)
+{
+
+
 }
 
 void crearTransaccion(Transaccion* &raiz)
@@ -80,7 +88,7 @@ void crearTransaccion(Transaccion* &raiz)
     cin>>hora;
 }
 
-void RevisarTransacciones(Transaccion* &raiz)
+void revisarTransacciones(Transaccion* &raiz)
 {
     int opcion;
 
@@ -132,7 +140,7 @@ void RevisarTransacciones(Transaccion* &raiz)
     }while(opcion != 1);
 }
 
-int menu(Transaccion* &raiz)
+int menu(Transaccion* &raiz, vector<Cliente*> &clientes)
 {
     int opcion;
 
@@ -150,10 +158,10 @@ int menu(Transaccion* &raiz)
                 crearTransaccion(raiz);
                 break;
             case 2:
-                RevisarTransacciones(raiz);
+                revisarTransacciones(raiz);
                 break;
             case 3:
-                
+                transaccionesSospechosas(clientes);
                 break;
             case 4:
                 cout << "Saliendo del programa...\n";
