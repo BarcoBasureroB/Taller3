@@ -10,9 +10,9 @@ class Cliente
 {
     public:
         string rut;
-        vector<Transaccion*> listaSospechosa;
+        queue<Transaccion*> listaSospechosa;
         vector<Transaccion*> listaTransac;
 
-        Cliente(string,vector<Transaccion*>&,vector<Transaccion*>&);
+        Cliente(string,vector<Transaccion*>&,queue<Transaccion*>&);
         ~Cliente();
 };

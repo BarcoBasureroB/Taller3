@@ -6,7 +6,7 @@
 
 using namespace std;
 
-Cliente::Cliente(string Rut, vector<Transaccion*> &listaTransac, vector<Transaccion*> &listaSospechosa)
+Cliente::Cliente(string Rut, vector<Transaccion*> &listaTransac, queue<Transaccion*> &listaSospechosa)
 {
     this -> rut = rut;
     this -> listaTransac = listaTransac;

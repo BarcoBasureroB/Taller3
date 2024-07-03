@@ -55,41 +55,46 @@ int crearIDRandom(Transaccion* &raiz)
     return id;
 }
 
-bool datoExiste(string rutSelect, vector<Cliente*> &clientes)
+bool datoExiste(string rutSelect, queue<Cliente*> clientes)
 {
     for(int i = 0; i < clientes.size(); i++)
     {
-        if(clientes[i]->rut == rutSelect)
+        if(clientes.front()->rut == rutSelect)
         {
             return true;
         }
+        clientes.pop();
     }
     return false;
 }
 
-bool idExiste(int id, vector<Transaccion*> listaSus)
+bool idExiste(int id, queue<Transaccion*> listaSus)
 {
     for(int i = 0; i < listaSus.size(); i++)
     {
-        if(listaSus[i]->id == id)
+        if(listaSus.front()->id == id)
         {
             return true;
         }
+        listaSus.pop();
     }
     return false;
 }
 
-void transaccionesSospechosas(vector<Cliente*> &clientes)
+void transaccionesSospechosas(queue<Cliente*> &clientes)
 {
     string rutSelect;
 
-    do{
 
+    do{
+        queue<Cliente*> aux = clientes;
+        
         cout<<"RUT de los clientes: "<<endl;
 
-        for(int i = 0; i < clientes.size(); i++)
+        for(int i = 0; i < aux.size(); i++)
         {
-            cout<<clientes[i]->rut<<endl;
+            cout<<aux.front()->rut<<endl;
+            aux.pop();
         }
         cout<<"Ingrese RUT a revisar: "<<endl;
         cin>>rutSelect;
@@ -101,25 +106,32 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
 
     Cliente* clientAux;
 
+    queue<Cliente*> aux1 = clientes;
+
     for(int i = 0; i < clientes.size(); i++)
     {
-        if(clientes[i]->rut == rutSelect)
+        if(aux1.front()->rut == rutSelect)
         {
-            clientAux = clientes[i];
+            clientAux = aux1.front();
+            break;
         }
+        aux1.pop();
     }
 
     int idAux;
-    vector<Transaccion*> listaSus = clientAux->listaSospechosa;
 
-    if(listaSus.size() != 0)
+    queue<Transaccion*> listaSus; 
+
+    if(clientAux->listaSospechosa.size() != 0)
     {
         do
         {
+            listaSus = clientAux->listaSospechosa;
             cout<<"IDs de Transferencias sospechosas: "<<endl;
             for(int i = 0; i < listaSus.size(); i++)
             {
-                cout<<listaSus[i]->id<<" | Fecha: "<<listaSus[i]->fecha<<"| Hora: "<<listaSus[i]->hora<<endl;
+                cout<<listaSus.front()->id<<" | Fecha: "<<listaSus.front()->fecha<<"| Hora: "<<listaSus.front()->hora<<endl;
+                listaSus.pop();
             }
 
             cout<<"Ingrese ID de Transacción a revisar: "<<endl;
@@ -132,18 +144,21 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
 
         }while(!idExiste(idAux, listaSus));
 
+        listaSus = clientAux->listaSospechosa;
+        
         for(int i = 0; i < listaSus.size(); i++)
         {
-            if(idAux == listaSus[i]->id)
+            if(idAux == listaSus.front()->id)
             {
-                cout<<"Rut de Origen: "<<listaSus[i]->rutOrigen<<endl;
-                cout<<"Rut de Destino: "<<listaSus[i]->rutFinal<<endl;
-                cout<<"Monto Transferido: "<<listaSus[i]->monto<<endl;
-                cout<<"Ubicación de Origen de transferencia: "<<listaSus[i]->ubicacion<<endl;
-                cout<<"Fecha de transferencia: "<<listaSus[i]->fecha<<endl;
-                cout<<"Hora de transferencia: "<<listaSus[i]->hora<<endl;
-                cout<<"Motivo de sospecha: "<<listaSus[i]->sospechosa<<endl;
+                cout<<"Rut de Origen: "<<listaSus.front()->rutOrigen<<endl;
+                cout<<"Rut de Destino: "<<listaSus.front()->rutFinal<<endl;
+                cout<<"Monto Transferido: "<<listaSus.front()->monto<<endl;
+                cout<<"Ubicación de Origen de transferencia: "<<listaSus.front()->ubicacion<<endl;
+                cout<<"Fecha de transferencia: "<<listaSus.front()->fecha<<endl;
+                cout<<"Hora de transferencia: "<<listaSus.front()->hora<<endl;
+                cout<<"Motivo de sospecha: "<<listaSus.front()->sospechosa<<endl;
             }
+            listaSus.pop();
         }
     }
     else
@@ -152,32 +167,37 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
     }
 }
 
-void arbolDeDecision(vector<Cliente*> &clientes, Transaccion* &raiz)
+void arbolDeDecision(queue<Cliente*> &clientes, Transaccion* &raiz)
 {
     
     if(raiz == nullptr){
         return;
     }
-    
+
     arbolDeDecision(clientes, raiz->hijoIzq);
+    
+    queue<Cliente*> aux;
     
     if(raiz->monto >= 1000000)
     {
         raiz->sospechosa = "Cantidad de Monto demasiado alta.";
         for(int i = 0; i < clientes.size() ;i++)
         {
-            if(clientes[i]->rut == raiz->rutOrigen || clientes[i]->rut == raiz->rutFinal)
+            if(clientes.front()->rut == raiz->rutOrigen || clientes.front()->rut == raiz->rutFinal)
             {
-                clientes[i]->listaSospechosa.push_back(raiz);
+                clientes.front()->listaSospechosa.push(raiz);
             }
+            aux.push(clientes.front());
+            clientes.pop();
         }
     }
 
     arbolDeDecision(clientes, raiz->hijoDer);
-
+    
+    clientes = aux;
 }
 
-void crearTransaccion(Transaccion* &raiz, vector<Cliente*> &clientes)
+void crearTransaccion(Transaccion* &raiz, queue<Cliente*> &clientes)
 {
     int id = crearIDRandom(raiz);
     string rutOrigen, rutDestino, ubicacion;
@@ -258,7 +278,7 @@ void revisarTransacciones(Transaccion* &raiz)
     }while(opcion != 1);
 }
 
-int menu(Transaccion* &raiz, vector<Cliente*> &clientes)
+int menu(Transaccion* &raiz, queue<Cliente*> &clientes)
 {
     int opcion;
     
@@ -288,6 +308,7 @@ int menu(Transaccion* &raiz, vector<Cliente*> &clientes)
                 cout << "Opción no válida. Por favor, ingrese una opción válida.\n";
         }
     } while(opcion != 4);
+    return 0;
 }
 
 int main()
