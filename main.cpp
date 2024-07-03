@@ -261,7 +261,7 @@ void revisarTransacciones(Transaccion* &raiz)
 int menu(Transaccion* &raiz, vector<Cliente*> &clientes)
 {
     int opcion;
-
+    
     do {
         cout << "\n|--- Menú ---|\n";
         cout << "1. Ingresar transacción al sistema.\n";
