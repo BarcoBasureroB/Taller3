@@ -153,6 +153,13 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
 
 
 
+void arbolDeDecision(vector<Cliente*> &clientes, Transaccion* &raiz)
+{
+    
+    
+
+}
+
 void crearTransaccion(Transaccion* &raiz, vector<Cliente*> &clientes)
 {
     int id = crearIDRandom(raiz);
@@ -176,6 +183,10 @@ void crearTransaccion(Transaccion* &raiz, vector<Cliente*> &clientes)
 
     cout<<"Hora de Transacción (Ej:): "<<endl;
     cin>>hora;
+
+    //Se inserta Nodo al arbol
+
+    arbolDeDecision(clientes, raiz);
 }
 
 void revisarTransacciones(Transaccion* &raiz)
