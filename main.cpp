@@ -32,7 +32,7 @@ void inOrdenRecursivo(Transaccion* &raiz)
     }
     
     inOrdenRecursivo(raiz->hijoIzq);
-    cout<<raiz->id<<"";
+    cout<<raiz->id<<endl;
     inOrdenRecursivo(raiz->hijoDer);
 }
 
@@ -142,6 +142,7 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
                 cout<<"Ubicación de Origen de transferencia: "<<listaSus[i]->ubicacion<<endl;
                 cout<<"Fecha de transferencia: "<<listaSus[i]->fecha<<endl;
                 cout<<"Hora de transferencia: "<<listaSus[i]->hora<<endl;
+                cout<<"Motivo de sospecha: "<<listaSus[i]->sospechosa<<endl;
             }
         }
     }
@@ -151,12 +152,28 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
     }
 }
 
-
-
 void arbolDeDecision(vector<Cliente*> &clientes, Transaccion* &raiz)
 {
     
+    if(raiz == nullptr){
+        return;
+    }
     
+    arbolDeDecision(clientes, raiz->hijoIzq);
+    
+    if(raiz->monto >= 1000000)
+    {
+        raiz->sospechosa = "Cantidad de Monto demasiado alta.";
+        for(int i = 0; i < clientes.size() ;i++)
+        {
+            if(clientes[i]->rut == raiz->rutOrigen || clientes[i]->rut == raiz->rutFinal)
+            {
+                clientes[i]->listaSospechosa.push_back(raiz);
+            }
+        }
+    }
+
+    arbolDeDecision(clientes, raiz->hijoDer);
 
 }
 
