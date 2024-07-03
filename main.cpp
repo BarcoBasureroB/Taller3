@@ -69,7 +69,14 @@ bool datoExiste(string rutSelect, vector<Cliente*> &clientes)
 
 bool idExiste(int id, vector<Transaccion*> listaSus)
 {
-
+    for(int i = 0; i < listaSus.size(); i++)
+    {
+        if(listaSus[i]->id == id)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void transaccionesSospechosas(vector<Cliente*> &clientes)
@@ -102,18 +109,19 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
         }
     }
 
-    do
+    int idAux;
+    vector<Transaccion*> listaSus = clientAux->listaSospechosa;
+
+    if(listaSus.size() != 0)
     {
-        cout<<"IDs de Transferencias sospechosas: "<<endl;
-        vector<Transaccion*> listaSus = clientAux->listaSospechosa;
-        if(listaSus.size() != 0)
+        do
         {
+            cout<<"IDs de Transferencias sospechosas: "<<endl;
             for(int i = 0; i < listaSus.size(); i++)
             {
                 cout<<listaSus[i]->id<<" | Fecha: "<<listaSus[i]->fecha<<"| Hora: "<<listaSus[i]->hora<<endl;
             }
 
-            int idAux;
             cout<<"Ingrese ID de Transacción a revisar: "<<endl;
             cin>>idAux;
 
@@ -121,16 +129,26 @@ void transaccionesSospechosas(vector<Cliente*> &clientes)
             {
                 cout<<"ID no encontrado. Ingrese un ID en el sistema. "<<endl;
             }
-        }
-        else
+
+        }while(!idExiste(idAux, listaSus));
+
+        for(int i = 0; i < listaSus.size(); i++)
         {
-            cout<<"No existen actividades sospechosas en este RUT."<<endl;
-            
+            if(idAux == listaSus[i]->id)
+            {
+                cout<<"Rut de Origen: "<<listaSus[i]->rutOrigen<<endl;
+                cout<<"Rut de Destino: "<<listaSus[i]->rutFinal<<endl;
+                cout<<"Monto Transferido: "<<listaSus[i]->monto<<endl;
+                cout<<"Ubicación de Origen de transferencia: "<<listaSus[i]->ubicacion<<endl;
+                cout<<"Fecha de transferencia: "<<listaSus[i]->fecha<<endl;
+                cout<<"Hora de transferencia: "<<listaSus[i]->hora<<endl;
+            }
         }
-
-    }while(!idExiste(idAux, listaSus));
-
-    
+    }
+    else
+    {
+        cout<<"No existe actividad sospechosa en este RUT."<<endl;
+    }
 }
 
 void crearTransaccion(Transaccion* &raiz)
