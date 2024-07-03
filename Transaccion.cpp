@@ -17,6 +17,7 @@ Transaccion::Transaccion(int id, string rutOrigen, string rutFinal, int monto, s
     this ->hora = hora;
     this -> hijoIzq = nullptr;
     this -> hijoDer = nullptr;
+    this -> sospechosa = nullptr;
 
 }
 

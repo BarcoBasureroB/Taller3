@@ -36,8 +36,6 @@ void inOrdenRecursivo(Transaccion* &raiz)
     inOrdenRecursivo(raiz->hijoDer);
 }
 
-
-
 int crearIDRandom(Transaccion* &raiz)
 {   
     bool existe = false;
@@ -57,10 +55,82 @@ int crearIDRandom(Transaccion* &raiz)
     return id;
 }
 
-void transaccionesSospechosas(vector<Cliente*> &clientes)
+bool datoExiste(string rutSelect, vector<Cliente*> &clientes)
+{
+    for(int i = 0; i < clientes.size(); i++)
+    {
+        if(clientes[i]->rut == rutSelect)
+        {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool idExiste(int id, vector<Transaccion*> listaSus)
 {
 
+}
 
+void transaccionesSospechosas(vector<Cliente*> &clientes)
+{
+    string rutSelect;
+
+    do{
+
+        cout<<"RUT de los clientes: "<<endl;
+
+        for(int i = 0; i < clientes.size(); i++)
+        {
+            cout<<clientes[i]->rut<<endl;
+        }
+        cout<<"Ingrese RUT a revisar: "<<endl;
+        cin>>rutSelect;
+        if(!datoExiste(rutSelect, clientes))
+        {
+            cout<<"RUT no encontrado. Ingrese un RUT en el sistema."<<endl;
+        }
+    }while(!datoExiste(rutSelect, clientes));
+
+    Cliente* clientAux;
+
+    for(int i = 0; i < clientes.size(); i++)
+    {
+        if(clientes[i]->rut == rutSelect)
+        {
+            clientAux = clientes[i];
+        }
+    }
+
+    do
+    {
+        cout<<"IDs de Transferencias sospechosas: "<<endl;
+        vector<Transaccion*> listaSus = clientAux->listaSospechosa;
+        if(listaSus.size() != 0)
+        {
+            for(int i = 0; i < listaSus.size(); i++)
+            {
+                cout<<listaSus[i]->id<<" | Fecha: "<<listaSus[i]->fecha<<"| Hora: "<<listaSus[i]->hora<<endl;
+            }
+
+            int idAux;
+            cout<<"Ingrese ID de Transacción a revisar: "<<endl;
+            cin>>idAux;
+
+            if(!idExiste(idAux, listaSus))
+            {
+                cout<<"ID no encontrado. Ingrese un ID en el sistema. "<<endl;
+            }
+        }
+        else
+        {
+            cout<<"No existen actividades sospechosas en este RUT."<<endl;
+            
+        }
+
+    }while(!idExiste(idAux, listaSus));
+
+    
 }
 
 void crearTransaccion(Transaccion* &raiz)

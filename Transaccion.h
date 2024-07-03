@@ -17,6 +17,7 @@ class Transaccion
         int id;
         Transaccion* hijoIzq;
         Transaccion* hijoDer;
+        string sospechosa;
         Transaccion(int, string, string, int, string, int, int);
         ~Transaccion();
 };
