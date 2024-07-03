@@ -2,6 +2,7 @@
 #include <queue>
 #include <vector>
 #include "Transaccion.h"
+#include "Cliente.h"
 
 using namespace std;
 
@@ -35,9 +36,48 @@ void inOrdenRecursivo(Transaccion* &raiz)
     inOrdenRecursivo(raiz->hijoDer);
 }
 
+int crearIDRandom(Transaccion* &raiz)
+{   
+    bool existe = false;
+    int id;
+    do
+    {
+        //proceso de crear número random
+
+        Transaccion* encontrado = busquedaRec(raiz, id);
+        if(encontrado != nullptr)
+        {
+            existe = true;
+        }
+        
+    }while(existe != false);
+
+    return id;
+}
+
 void crearTransaccion(Transaccion* &raiz)
 {
+    int id = crearIDRandom(raiz);
+    string rutOrigen, rutDestino, ubicacion;
+    int monto, fecha, hora;
+    cout<<"Ingrese los siguientes datos: "<<endl;
+    cout<<"RUT de origen: "<<endl;
+    cin>>rutOrigen;
 
+    cout<<"RUT de destino: "<<endl;
+    cin>>rutDestino;
+
+    cout<<"Monto recibido (Ej: 100000):"<<endl;
+    cin>>monto;
+
+    cout<<"Ubicación de Transferencia: "<<endl;
+    cin>>ubicacion;
+
+    cout<<"Fecha de Transacción: "<<endl;
+    cin>>fecha;
+
+    cout<<"Hora de Transacción (Ej:): "<<endl;
+    cin>>hora;
 }
 
 void RevisarTransacciones(Transaccion* &raiz)
@@ -98,8 +138,8 @@ int menu(Transaccion* &raiz)
 
     do {
         cout << "\n|--- Menú ---|\n";
-        cout << "1. Realizar Transacción.\n";
-        cout << "2. Registro de Transacción.\n";
+        cout << "1. Ingresar transacción al sistema.\n";
+        cout << "2. Registro de Transacciones.\n";
         cout << "3. Transacciones Sospechosas.\n";
         cout << "4. Salir\n";
         cout << "Ingrese una opción(Ejemplo: 1): ";

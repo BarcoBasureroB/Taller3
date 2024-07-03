@@ -12,12 +12,12 @@ class Transaccion
         string rutFinal;
         int monto;
         string ubicacion;
-        string fecha;
+        int fecha;
         int hora;
         int id;
         Transaccion* hijoIzq;
         Transaccion* hijoDer;
-        Transaccion(int, string, string, int, string, string, int);
+        Transaccion(int, string, string, int, string, int, int);
         ~Transaccion();
 };
 

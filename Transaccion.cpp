@@ -3,8 +3,9 @@
 #include <vector>
 #include "Transaccion.h"
 
+using namespace std;
 
-Transaccion::Transaccion(int id, string rutOrigen, string rutFinal, int monto, string ubicacion, string fecha, int hora)
+Transaccion::Transaccion(int id, string rutOrigen, string rutFinal, int monto, string ubicacion, int fecha, int hora)
 {
 
     this ->id = id;
