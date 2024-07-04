@@ -330,11 +330,8 @@ Nodo* cargarDatos()
 
     while(getline(datosTransaccion, texto))
     {
-        cout<<"c"<<endl;
         raiz = aux1->insertar(raiz, aux2->subirTransacciones(texto));
-        cout<<"c"<<endl;
     }
-
     datosTransaccion.close();
     
     return raiz;
@@ -343,12 +340,7 @@ Nodo* cargarDatos()
 int main()
 {
     Nodo* raiz = nullptr;
-    Cliente* aux;
-    queue<Cliente*> clientes;
-    cout<<"a"<<endl;
     raiz = cargarDatos();
-    cout<<"a"<<endl;
-    aux->cargarClientes(clientes, raiz);
-    cout<<"a"<<endl;
-    menu(raiz,clientes);
+    inOrdenRecursivo(raiz);
+    //menu(raiz,clientes);
 }
