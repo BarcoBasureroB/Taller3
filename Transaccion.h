@@ -2,6 +2,8 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -12,13 +14,12 @@ class Transaccion
         string rutFinal;
         int monto;
         string ubicacion;
-        int fecha;
-        int hora;
+        string fecha;
+        string hora;
         int id;
-        Transaccion* hijoIzq;
-        Transaccion* hijoDer;
         string sospechosa;
-        Transaccion(int, string, string, int, string, int, int);
+        Transaccion(int, string, string, int, string, string, string);
         ~Transaccion();
+        Transaccion* subirTransacciones(string);
 };
 

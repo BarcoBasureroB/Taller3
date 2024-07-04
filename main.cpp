@@ -1,42 +1,35 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include "Nodo.h"
 #include "Transaccion.h"
 #include "Cliente.h"
 
 using namespace std;
 
-Transaccion* busquedaRec(Transaccion* &raiz, int datoABuscar)
+Nodo* busquedaRec(Nodo* &raiz, int datoABuscar)
 {
-    if(!raiz)
-    {
-        return nullptr;
-    }
+    if(!raiz->datos) {return nullptr;}
 
-    if(raiz->id == datoABuscar)
-    {
-        return raiz;
-    }
+    if(raiz->datos->id == datoABuscar) {return raiz;}
 
-    if(raiz->id > datoABuscar)
-    {
-        return busquedaRec(raiz->hijoIzq,datoABuscar);
-    }
-    return busquedaRec(raiz->hijoDer,datoABuscar);
+    if(raiz->datos->id > datoABuscar){return busquedaRec(raiz->izquierda,datoABuscar);}
+    
+    return busquedaRec(raiz->derecha,datoABuscar);
 }
 
-void inOrdenRecursivo(Transaccion* &raiz)
+void inOrdenRecursivo(Nodo* &raiz)
 {
     if(raiz == nullptr){
         return;
     }
     
-    inOrdenRecursivo(raiz->hijoIzq);
-    cout<<raiz->id<<endl;
-    inOrdenRecursivo(raiz->hijoDer);
+    inOrdenRecursivo(raiz->izquierda);
+    cout<<raiz->datos->id<<endl;
+    inOrdenRecursivo(raiz->derecha);
 }
 
-int crearIDRandom(Transaccion* &raiz)
+int crearIDRandom(Nodo* &raiz)
 {   
     bool existe = false;
     int id;
@@ -44,7 +37,7 @@ int crearIDRandom(Transaccion* &raiz)
     {
         //proceso de crear número random
 
-        Transaccion* encontrado = busquedaRec(raiz, id);
+        Nodo* encontrado = busquedaRec(raiz, id);
         if(encontrado != nullptr)
         {
             existe = true;
@@ -167,37 +160,37 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
     }
 }
 
-void arbolDeDecision(queue<Cliente*> &clientes, Transaccion* &raiz)
+void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
 {
     
     if(raiz == nullptr){
         return;
     }
 
-    arbolDeDecision(clientes, raiz->hijoIzq);
+    arbolDeDecision(clientes, raiz->izquierda);
     
     queue<Cliente*> aux;
     
-    if(raiz->monto >= 1000000)
+    if(raiz->datos->monto >= 1000000)
     {
-        raiz->sospechosa = "Cantidad de Monto demasiado alta.";
+        raiz->datos->sospechosa = "Cantidad de Monto demasiado alta.";
         for(int i = 0; i < clientes.size() ;i++)
         {
-            if(clientes.front()->rut == raiz->rutOrigen || clientes.front()->rut == raiz->rutFinal)
+            if(clientes.front()->rut == raiz->datos->rutOrigen || clientes.front()->rut == raiz->datos->rutFinal)
             {
-                clientes.front()->listaSospechosa.push(raiz);
+                clientes.front()->listaSospechosa.push(raiz->datos);
             }
             aux.push(clientes.front());
             clientes.pop();
         }
     }
 
-    arbolDeDecision(clientes, raiz->hijoDer);
+    arbolDeDecision(clientes, raiz->derecha);
     
     clientes = aux;
 }
 
-void crearTransaccion(Transaccion* &raiz, queue<Cliente*> &clientes)
+void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     int id = crearIDRandom(raiz);
     string rutOrigen, rutDestino, ubicacion;
@@ -226,7 +219,7 @@ void crearTransaccion(Transaccion* &raiz, queue<Cliente*> &clientes)
     arbolDeDecision(clientes, raiz);
 }
 
-void revisarTransacciones(Transaccion* &raiz)
+void revisarTransacciones(Nodo* &raiz)
 {
     int opcion;
 
@@ -238,18 +231,18 @@ void revisarTransacciones(Transaccion* &raiz)
         cout<<"Ingresa el ID de Transacción:"<<endl;
         cin>>IDBuscar;
 
-        Transaccion* encontrada = busquedaRec(raiz, IDBuscar);
+        Nodo* encontrada = busquedaRec(raiz, IDBuscar);
 
         if(encontrada != nullptr)
         {
             cout<<"Datos de Transacción:"<<endl;
-            cout<<"ID: "<<encontrada->id<<endl;
-            cout<<"RUT de origen: "<<encontrada->rutOrigen<<endl;
-            cout<<"RUT de destino: "<<encontrada->rutFinal<<endl;
-            cout<<"Monto recibido: "<<encontrada->monto<<endl;
-            cout<<"Ubicación de Transferencia: "<<encontrada->ubicacion<<endl;
-            cout<<"Fecha de Transacción: "<<encontrada->fecha<<endl;
-            cout<<"Hora de Transacción: "<<encontrada->hora<<endl;
+            cout<<"ID: "<<encontrada->datos->id<<endl;
+            cout<<"RUT de origen: "<<encontrada->datos->rutOrigen<<endl;
+            cout<<"RUT de destino: "<<encontrada->datos->rutFinal<<endl;
+            cout<<"Monto recibido: "<<encontrada->datos->monto<<endl;
+            cout<<"Ubicación de Transferencia: "<<encontrada->datos->ubicacion<<endl;
+            cout<<"Fecha de Transacción: "<<encontrada->datos->fecha<<endl;
+            cout<<"Hora de Transacción: "<<encontrada->datos->hora<<endl;
         
         }
         else
@@ -278,7 +271,7 @@ void revisarTransacciones(Transaccion* &raiz)
     }while(opcion != 1);
 }
 
-int menu(Transaccion* &raiz, queue<Cliente*> &clientes)
+int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     int opcion;
     
@@ -311,7 +304,10 @@ int menu(Transaccion* &raiz, queue<Cliente*> &clientes)
     return 0;
 }
 
+
+
 int main()
 {
-    
+    Nodo* raiz = nullptr;
+    raiz;
 }
