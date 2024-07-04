@@ -19,7 +19,6 @@ void Cliente::agregarSospecha(Transaccion* datos)
 {
     if(listaSospechosa.front() == nullptr)
     {
-        cout<<"a"<<endl;
         this->listaSospechosa.pop();
         this->listaSospechosa.push(datos);
     }
