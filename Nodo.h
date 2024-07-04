@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include "Transaccion.h"
 using namespace std;
@@ -9,7 +10,7 @@ class Nodo
         Nodo* izquierda;
         Nodo* derecha;
         int alturaNodo;
-
+        ~Nodo();
         Nodo(Transaccion*);
         int altura(Nodo* N);
         int max(int a, int b);

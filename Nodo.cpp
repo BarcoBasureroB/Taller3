@@ -9,6 +9,8 @@ Nodo::Nodo(Transaccion* datos)
     this->alturaNodo = 1;
 }
 
+Nodo::~Nodo(){}
+
 int Nodo::altura(Nodo* N) 
 {
     if (N) {return N->alturaNodo;}

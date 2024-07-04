@@ -6,17 +6,19 @@
 #include "Cliente.h"
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
+#include <ctime>
 
 using namespace std;
 
 Nodo* busquedaRec(Nodo* &raiz, int datoABuscar)
 {
-    if(!raiz->datos) {return nullptr;}
-
+    if(!raiz) {return nullptr;}
+    
     if(raiz->datos->id == datoABuscar) {return raiz;}
 
     if(raiz->datos->id > datoABuscar){return busquedaRec(raiz->izquierda,datoABuscar);}
-    
+
     return busquedaRec(raiz->derecha,datoABuscar);
 }
 
@@ -34,12 +36,19 @@ void inOrdenRecursivo(Nodo* &raiz)
 int crearIDRandom(Nodo* &raiz)
 {   
     bool existe = false;
-    int id;
+    int idRandom;
     do
     {
-        //proceso de crear número random
+        srand(time(0));
 
-        Nodo* encontrado = busquedaRec(raiz, id);
+        int minId = 10000;
+        int maxId = 99999;
+
+        idRandom = minId + rand() % ((maxId + 1) - minId);
+
+
+        Nodo* encontrado = busquedaRec(raiz, idRandom);
+        
         if(encontrado != nullptr)
         {
             existe = true;
@@ -47,7 +56,7 @@ int crearIDRandom(Nodo* &raiz)
         
     }while(existe != false);
 
-    return id;
+    return idRandom;
 }
 
 bool datoExiste(string rutSelect, queue<Cliente*> clientes)
@@ -194,9 +203,10 @@ void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
 
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
+    Nodo* aux;
     int id = crearIDRandom(raiz);
-    string rutOrigen, rutDestino, ubicacion;
-    int monto, fecha, hora;
+    string rutOrigen, rutDestino, ubicacion, fecha, hora;
+    int monto;
     cout<<"Ingrese los siguientes datos: "<<endl;
     cout<<"RUT de origen: "<<endl;
     cin>>rutOrigen;
@@ -216,14 +226,16 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     cout<<"Hora de Transacción (Ej:): "<<endl;
     cin>>hora;
 
-    //Se inserta Nodo al arbol
+    Transaccion* nuevaTransaccion = new Transaccion(crearIDRandom(raiz), rutOrigen, rutDestino, monto, ubicacion, fecha, hora);
+
+    raiz = aux->insertar(raiz, nuevaTransaccion);
 
     arbolDeDecision(clientes, raiz);
 }
 
 void revisarTransacciones(Nodo* &raiz)
 {
-    int opcion;
+    int opcion, opcion2;
 
     do{
         cout<<"IDs en el sistema:"<<endl;
@@ -255,8 +267,8 @@ void revisarTransacciones(Nodo* &raiz)
         do
         {
             cout<<"¿Desea finalizar la revisión de Tranferencias?( 1)Si  2)No ): "<<endl;
-            cin>>opcion;
-            switch(opcion)
+            cin>>opcion2;
+            switch(opcion2)
             {
                 case 1:
                     cout<<"Volviendo al Menú..."<<endl;
@@ -268,9 +280,9 @@ void revisarTransacciones(Nodo* &raiz)
                     cout << "Opción no válida. Por favor, ingrese una opción válida.\n";
         
             }
-        }while(opcion != 1 && opcion != 2);
+        }while(opcion2 != 1 && opcion2 != 2);
 
-    }while(opcion != 1);
+    }while(opcion2 != 1);
 }
 
 int menu(Nodo* &raiz, queue<Cliente*> &clientes)
@@ -308,14 +320,15 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 
 Nodo* cargarDatos()
 {
+    Nodo* aux1;
     Nodo* raiz;
-    Transaccion* aux;
+    Transaccion* aux2;
 
     string texto;
     
     ifstream datosTransaccion;
 
-    datosTransaccion.open("Datos Eventos.txt", ios::in);
+    datosTransaccion.open("Transferencias.txt", ios::in);
 
     if(datosTransaccion.fail())
     {
@@ -325,13 +338,26 @@ Nodo* cargarDatos()
 
     while(getline(datosTransaccion, texto))
     {
-        raiz = raiz->insertar(raiz, aux->subirTransacciones(texto));
+        raiz = aux1->insertar(raiz, aux2->subirTransacciones(texto));
     }
     datosTransaccion.close();
+    
+    return raiz;
 }
 
 int main()
 {
     Nodo* raiz = nullptr;
-    raiz;
+    Cliente* aux;
+    queue<Cliente*> clientes;
+    raiz = cargarDatos();
+    aux->cargarClientes(clientes, raiz);
+    arbolDeDecision(clientes, raiz);
+
+    while(!clientes.empty())
+    {
+        cout<<clientes.front()->rut<<endl;
+        clientes.pop();
+    }
+    menu(raiz,clientes);
 }
