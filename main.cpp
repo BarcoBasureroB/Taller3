@@ -4,6 +4,8 @@
 #include "Nodo.h"
 #include "Transaccion.h"
 #include "Cliente.h"
+#include <fstream>
+#include <sstream>
 
 using namespace std;
 
@@ -304,7 +306,29 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
     return 0;
 }
 
+Nodo* cargarDatos()
+{
+    Nodo* raiz;
+    Transaccion* aux;
 
+    string texto;
+    
+    ifstream datosTransaccion;
+
+    datosTransaccion.open("Datos Eventos.txt", ios::in);
+
+    if(datosTransaccion.fail())
+    {
+        cout<<"ERROR! no se pudo leer el archivo eventos."<<endl;
+        exit(1);
+    }
+
+    while(getline(datosTransaccion, texto))
+    {
+        raiz = raiz->insertar(raiz, aux->subirTransacciones(texto));
+    }
+    datosTransaccion.close();
+}
 
 int main()
 {
