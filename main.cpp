@@ -185,8 +185,6 @@ void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
     if(raiz->datos->monto >= 1000000)
     {  
         raiz->datos->sospechosa = "Cantidad de Monto demasiado alta.";
-        aux->agregarTransferenciaSospechosa(clientes, raiz->datos->rutOrigen, raiz->datos);
-        aux->agregarTransferenciaSospechosa(clientes, raiz->datos->rutFinal, raiz->datos);
     }
 
     arbolDeDecision(clientes, raiz->derecha);
@@ -339,8 +337,18 @@ Nodo* cargarDatos()
 
 int main()
 {
+    Cliente* aux;
     Nodo* raiz = nullptr;
     raiz = cargarDatos();
-    inOrdenRecursivo(raiz);
+    queue<Cliente*> clientes;
+    aux->cargarClientes(clientes, raiz);
+    while(!clientes.empty())
+    {
+        if(clientes.front()->getListaSospechosa().front() != nullptr)
+        {
+            cout<<clientes.front()->getListaSospechosa().front()->monto<<endl;
+        }
+        clientes.pop();
+    }
     //menu(raiz,clientes);
 }

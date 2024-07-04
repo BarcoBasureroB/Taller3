@@ -36,3 +36,8 @@ Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
     Transaccion* nuevaTransaccion = new Transaccion(stoi(id), cuentaOrigen, cuentaDestino, stoi(monto), ubicacion, fecha, hora);
     return nuevaTransaccion;
 }
+
+void Transaccion::setSospechosa(string sospechosa)
+{
+    this->sospechosa = sospechosa;
+}

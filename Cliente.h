@@ -17,5 +17,7 @@ class Cliente
         ~Cliente();
         void cargarClientes(queue<Cliente*>&, Nodo*);
         bool buscarRut(queue<Cliente*>, string);
-        void agregarTransferenciaSospechosa(queue<Cliente*>&, string, Transaccion*);
+        bool confirmarTransferenciaSospechosa(Cliente*&, Transaccion*);
+        void agregarSospecha(Transaccion*);
+        queue<Transaccion*> getListaSospechosa();
 };

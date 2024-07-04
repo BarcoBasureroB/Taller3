@@ -21,5 +21,6 @@ class Transaccion
         Transaccion(int, string, string, int, string, string, string);
         ~Transaccion();
         Transaccion* subirTransacciones(string);
+        void setSospechosa(string);
 };
 

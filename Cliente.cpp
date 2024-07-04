@@ -1,37 +1,83 @@
 #include <iostream>
 #include <queue>
+#include <stack>
 #include <vector>
 #include "Cliente.h"
 #include "Nodo.h"
 
 using namespace std;
 
-Cliente::Cliente(string rut) {this -> rut = rut;}
+Cliente::Cliente(string rut) 
+{
+    this -> rut = rut;
+    this->listaSospechosa.push(nullptr);
+}
 
 Cliente::~Cliente(){}
 
+void Cliente::agregarSospecha(Transaccion* datos)
+{
+    if(listaSospechosa.front() == nullptr)
+    {
+        cout<<"a"<<endl;
+        this->listaSospechosa.pop();
+        this->listaSospechosa.push(datos);
+    }
+    else
+    {
+        this->listaSospechosa.push(datos);
+    }
+}
+
+bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
+{
+    if(datos->monto >= 1000000)
+    {
+        datos->setSospechosa("Cantidad de Monto demasiado alta");
+        cliente->agregarSospecha(datos);
+        return true;
+    }
+    return false;
+}
+
 void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
 {
-    if(raiz == nullptr)
-    {
-        return;
-    }
+    stack<Nodo*> pila;
     
-    cargarClientes(clientes, raiz->izquierda);
-    if(buscarRut(clientes, raiz->datos->rutOrigen))
+    Nodo* actual = raiz;
+ 
+   
+    while (!pila.empty() || actual != nullptr)
     {
-        Cliente* nuevoCliente = new Cliente(raiz->datos->rutOrigen);
-        clientes.push(nuevoCliente);
-        cout<<raiz->datos->monto<<endl;
-    }
-    if(buscarRut(clientes, raiz->datos->rutFinal))
-    {
-        Cliente* nuevoCliente = new Cliente(raiz->datos->rutFinal);
-        clientes.push(nuevoCliente);
-        cout<<raiz->datos->monto<<endl;
-    }
+        
+        if (actual != nullptr)
+        {
+            pila.push(actual);
+            actual = actual->izquierda;
+        }
+        else {
+            
+            actual = pila.top();
 
-    cargarClientes(clientes, raiz->derecha);
+            if(buscarRut(clientes, actual->datos->rutOrigen))
+            {
+                Cliente* nuevoCliente = new Cliente(actual->datos->rutOrigen);
+                confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);
+                clientes.push(nuevoCliente);
+            }
+            if(buscarRut(clientes, actual->datos->rutFinal))
+            {
+                Cliente* nuevoCliente = new Cliente(actual->datos->rutFinal);
+                confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);                                                                        
+                clientes.push(nuevoCliente);
+            }
+
+            pila.pop();
+
+ 
+            actual = actual->derecha;
+        }
+    }
 }
 bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 {
@@ -54,17 +100,7 @@ bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
     return true;
 }
 
-void Cliente::agregarTransferenciaSospechosa(queue<Cliente*>& clientes, string rut, Transaccion* datos)
+queue<Transaccion*> Cliente::getListaSospechosa()
 {
-    queue<Cliente*> aux;
-    while(!clientes.empty())
-    {
-        if(clientes.front()->rut == rut)
-        {
-            clientes.front()->listaSospechosa.push(datos);
-        }
-        aux.push(clientes.front());
-        clientes.pop();
-    }
-    clientes = aux;
+    return this->listaSospechosa;
 }
