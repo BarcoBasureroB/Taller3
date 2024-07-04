@@ -74,13 +74,14 @@ bool datoExiste(string rutSelect, queue<Cliente*> clientes)
 
 bool idExiste(int id, queue<Transaccion*> listaSus)
 {
-    for(int i = 0; i < listaSus.size(); i++)
+    queue<Transaccion*> aux = listaSus;
+    while(!aux.empty())
     {
-        if(listaSus.front()->id == id)
+        if(aux.front()->id == id)
         {
             return true;
         }
-        listaSus.pop();
+        aux.pop();
     }
     return false;
 }
@@ -123,16 +124,15 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
     }
 
     int idAux;
-
     queue<Transaccion*> listaSus; 
 
-    if(clientAux->listaSospechosa.size() != 0)
+    if(clientAux->getListaSospechosa().front() != nullptr)
     {
         do
         {
-            listaSus = clientAux->listaSospechosa;
+            listaSus = clientAux->getListaSospechosa();
             cout<<"IDs de Transferencias sospechosas: "<<endl;
-            for(int i = 0; i < listaSus.size(); i++)
+            while(!listaSus.empty())
             {
                 cout<<listaSus.front()->id<<" | Fecha: "<<listaSus.front()->fecha<<"| Hora: "<<listaSus.front()->hora<<endl;
                 listaSus.pop();
@@ -141,16 +141,16 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
             cout<<"Ingrese ID de Transacción a revisar: "<<endl;
             cin>>idAux;
 
-            if(!idExiste(idAux, listaSus))
+            if(!idExiste(idAux, clientAux->getListaSospechosa()))
             {
                 cout<<"ID no encontrado. Ingrese un ID en el sistema. "<<endl;
             }
 
-        }while(!idExiste(idAux, listaSus));
+        }while(!idExiste(idAux, clientAux->getListaSospechosa()));
 
-        listaSus = clientAux->listaSospechosa;
+        listaSus = clientAux->getListaSospechosa();
         
-        for(int i = 0; i < listaSus.size(); i++)
+        while(!listaSus.empty())
         {
             if(idAux == listaSus.front()->id)
             {
@@ -342,13 +342,5 @@ int main()
     raiz = cargarDatos();
     queue<Cliente*> clientes;
     aux->cargarClientes(clientes, raiz);
-    while(!clientes.empty())
-    {
-        if(clientes.front()->getListaSospechosa().front() != nullptr)
-        {
-            cout<<clientes.front()->getListaSospechosa().front()->monto<<endl;
-        }
-        clientes.pop();
-    }
-    //menu(raiz,clientes);
+    menu(raiz,clientes);
 }
