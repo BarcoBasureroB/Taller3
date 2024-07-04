@@ -22,11 +22,13 @@ void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
     {
         Cliente* nuevoCliente = new Cliente(raiz->datos->rutOrigen);
         clientes.push(nuevoCliente);
+        cout<<raiz->datos->monto<<endl;
     }
     if(buscarRut(clientes, raiz->datos->rutFinal))
     {
         Cliente* nuevoCliente = new Cliente(raiz->datos->rutFinal);
         clientes.push(nuevoCliente);
+        cout<<raiz->datos->monto<<endl;
     }
 
     cargarClientes(clientes, raiz->derecha);
@@ -50,4 +52,19 @@ bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
         aux.pop();
     }
     return true;
+}
+
+void Cliente::agregarTransferenciaSospechosa(queue<Cliente*>& clientes, string rut, Transaccion* datos)
+{
+    queue<Cliente*> aux;
+    while(!clientes.empty())
+    {
+        if(clientes.front()->rut == rut)
+        {
+            clientes.front()->listaSospechosa.push(datos);
+        }
+        aux.push(clientes.front());
+        clientes.pop();
+    }
+    clientes = aux;
 }

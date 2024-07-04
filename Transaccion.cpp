@@ -34,6 +34,6 @@ Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
     getline(datosSeparar, hora, ',');
 
     Transaccion* nuevaTransaccion = new Transaccion(stoi(id), cuentaOrigen, cuentaDestino, stoi(monto), ubicacion, fecha, hora);
-    
+    cout<<"b"<<endl;
     return nuevaTransaccion;
 }

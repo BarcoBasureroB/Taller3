@@ -173,37 +173,29 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
 
 void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
 {
-    
+    Cliente* aux;
+
     if(raiz == nullptr){
         return;
     }
 
     arbolDeDecision(clientes, raiz->izquierda);
     
-    queue<Cliente*> aux;
     
     if(raiz->datos->monto >= 1000000)
-    {
+    {  
         raiz->datos->sospechosa = "Cantidad de Monto demasiado alta.";
-        for(int i = 0; i < clientes.size() ;i++)
-        {
-            if(clientes.front()->rut == raiz->datos->rutOrigen || clientes.front()->rut == raiz->datos->rutFinal)
-            {
-                clientes.front()->listaSospechosa.push(raiz->datos);
-            }
-            aux.push(clientes.front());
-            clientes.pop();
-        }
+        aux->agregarTransferenciaSospechosa(clientes, raiz->datos->rutOrigen, raiz->datos);
+        aux->agregarTransferenciaSospechosa(clientes, raiz->datos->rutFinal, raiz->datos);
     }
 
     arbolDeDecision(clientes, raiz->derecha);
-    
-    clientes = aux;
 }
 
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     Nodo* aux;
+    queue<Cliente*> aux1;
     int id = crearIDRandom(raiz);
     string rutOrigen, rutDestino, ubicacion, fecha, hora;
     int monto;
@@ -230,7 +222,7 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 
     raiz = aux->insertar(raiz, nuevaTransaccion);
 
-    arbolDeDecision(clientes, raiz);
+    arbolDeDecision(clientes,raiz);
 }
 
 void revisarTransacciones(Nodo* &raiz)
@@ -338,8 +330,11 @@ Nodo* cargarDatos()
 
     while(getline(datosTransaccion, texto))
     {
+        cout<<"c"<<endl;
         raiz = aux1->insertar(raiz, aux2->subirTransacciones(texto));
+        cout<<"c"<<endl;
     }
+
     datosTransaccion.close();
     
     return raiz;
@@ -350,14 +345,10 @@ int main()
     Nodo* raiz = nullptr;
     Cliente* aux;
     queue<Cliente*> clientes;
+    cout<<"a"<<endl;
     raiz = cargarDatos();
+    cout<<"a"<<endl;
     aux->cargarClientes(clientes, raiz);
-    arbolDeDecision(clientes, raiz);
-
-    while(!clientes.empty())
-    {
-        cout<<clientes.front()->rut<<endl;
-        clientes.pop();
-    }
+    cout<<"a"<<endl;
     menu(raiz,clientes);
 }
