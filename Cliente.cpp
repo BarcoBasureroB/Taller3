@@ -45,11 +45,21 @@ void Cliente::setListaTransac(Transaccion* datos)
 
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
 {
+    string hora;
+    stringstream datosSeparar(datos->hora);
+    getline(datosSeparar, hora, ':');
+    
     if(datos->monto >= 1000000)
     {
         datos->setSospechosa("Cantidad de Monto demasiado alta");
         cliente->agregarSospecha(datos);
         return true; 
+    }
+    else if(stoi(hora) < 2)
+    {
+        datos->setSospechosa("Hora de transacción poco habitual");
+        cliente->agregarSospecha(datos);
+        return true;
     }
     cliente->setListaTransac(datos);
     // if(cliente->getListaTransac().size() > 1)

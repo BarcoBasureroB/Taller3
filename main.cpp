@@ -61,7 +61,7 @@ int crearIDRandom(Nodo* &raiz)
 
 bool datoExiste(string rutSelect, queue<Cliente*> clientes)
 {
-    for(int i = 0; i < clientes.size(); i++)
+    while(!clientes.empty())
     {
         if(clientes.front()->rut == rutSelect)
         {
@@ -96,7 +96,7 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
         
         cout<<"RUT de los clientes: "<<endl;
 
-        for(int i = 0; i < aux.size(); i++)
+        while(!aux.empty())
         {
             cout<<aux.front()->rut<<endl;
             aux.pop();
@@ -227,8 +227,9 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     }
     else
     {
-        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutOrigen);
+        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutFinal);
         clientes.push(nuevoCliente);
+        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutFinal);
     }
     if(!aux2->buscarRut(clientes, nuevaTransaccion->rutOrigen))
     {
@@ -238,8 +239,8 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     {
         Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutFinal);
         clientes.push(nuevoCliente);
+        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutFinal);
     }
-    
 }
 
 void revisarTransacciones(Nodo* &raiz)
@@ -298,7 +299,8 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     int opcion;
     
-    do {
+    do
+    {
         cout << "\n|--- Menú ---|\n";
         cout << "1. Ingresar transacción al sistema.\n";
         cout << "2. Registro de Transacciones.\n";
