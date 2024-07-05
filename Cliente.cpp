@@ -88,6 +88,24 @@ void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
     }
     buscarTransacciones(cliente, raiz->derecha);
 }
+void Cliente::agregarTransaccionClienteExistente(queue<Cliente*>& clientes, Transaccion* transaccion, string rut)
+{
+    queue<Cliente*> aux;
+    while(!clientes.empty())
+    {
+        if(clientes.front()->rut == rut)
+        {
+            confirmarTransferenciaSospechosa(clientes.front(),transaccion);
+        }
+        aux.push(clientes.front());
+        clientes.pop();
+    }
+    while(!aux.empty())
+    {
+        clientes.push(aux.front());
+        aux.pop();
+    }
+}
 
 void Cliente::agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz)
 {

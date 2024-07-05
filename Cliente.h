@@ -26,4 +26,5 @@ class Cliente
         void setListaTransac(Transaccion*);
         void agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz);
         void buscarTransacciones(Cliente* & cliente, Nodo* raiz);
+        void agregarTransaccionClienteExistente(queue<Cliente*>&, Transaccion*, string);
 };

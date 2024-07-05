@@ -192,6 +192,7 @@ void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
 
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
+    Cliente* aux2;
     Nodo* aux;
     queue<Cliente*> aux1;
     int id = crearIDRandom(raiz);
@@ -220,7 +221,24 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 
     raiz = aux->insertar(raiz, nuevaTransaccion);
 
-    arbolDeDecision(clientes,raiz);
+    if(!aux2->buscarRut(clientes, nuevaTransaccion->rutFinal))
+    {
+        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutFinal);
+    }
+    else
+    {
+        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutOrigen);
+        clientes.push(nuevoCliente);
+    }
+    if(!aux2->buscarRut(clientes, nuevaTransaccion->rutOrigen))
+    {
+        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutOrigen);
+    }
+    else
+    {
+        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutFinal);
+        clientes.push(nuevoCliente);
+    }
     
 }
 
