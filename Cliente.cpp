@@ -43,12 +43,27 @@ void Cliente::setListaTransac(Transaccion* datos)
     }
 }
 
+void sospechaTiempo(Transaccion* ant1, Transaccion* ant2, Transaccion* datos)
+{
+    if(ant1->ubicacion == datos->ubicacion && ant2->ubicacion == datos->ubicacion)
+    {
+
+    }
+    else
+    {
+
+    }
+}
+
+//ordenar lista de transacciones despues de meter todas las transacciones
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
 {
     string hora;
     stringstream datosSeparar(datos->hora);
     getline(datosSeparar, hora, ':');
-    
+    queue<Transaccion*> aux = cliente->getListaTransac();
+    stack<Transaccion*> aux1;
+
     if(datos->monto >= 1000000)
     {
         datos->setSospechosa("Cantidad de Monto demasiado alta");
@@ -60,6 +75,28 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
         datos->setSospechosa("Hora de transacción poco habitual");
         cliente->agregarSospecha(datos);
         return true;
+    }
+    else if(cliente->getListaTransac().size() > 1)
+    {
+        Transaccion* ant1;
+        Transaccion* ant2;
+        
+        while(!aux.empty())
+        {
+            aux1.push(aux.front());
+            aux.pop();
+        }
+
+        ant1 = aux1.top(); aux1.pop();
+        ant2 = aux1.top(); aux1.pop();
+
+        while(!aux1.empty()) {aux1.pop();}
+
+        if(ant1->fecha == datos->fecha && ant2->fecha == datos->fecha)
+        {
+            sospechaTiempo(ant1, ant2, datos);
+        }
+
     }
     cliente->setListaTransac(datos);
     // if(cliente->getListaTransac().size() > 1)
@@ -83,7 +120,7 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
 
     return false;
 }
-
+//ordenar cada que agregamos una transferencia
 void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
 {
     if(raiz == nullptr)
