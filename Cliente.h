@@ -22,9 +22,10 @@ class Cliente
         void agregarSospecha(Transaccion*);
         void agregarTransaccion(queue<Cliente*>& , Transaccion* , string);
         queue<Transaccion*> getListaSospechosa();
-        queue<Transaccion*> getListaTransac();
         void setListaTransac(Transaccion*);
         void agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz);
         void buscarTransacciones(Cliente* & cliente, Nodo* raiz);
         void agregarTransaccionClienteExistente(queue<Cliente*>&, Transaccion*, string);
+        void ordenarQueue(queue<Transaccion*>&);
+        void explorarOrdenar(queue<Cliente*>&);
 };

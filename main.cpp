@@ -358,11 +358,18 @@ Nodo* cargarDatos()
 
 int main()
 {
+    queue<Transaccion*> aux1;
     Cliente* aux;
     Nodo* raiz = nullptr;
     queue<Cliente*> clientes;
     raiz = cargarDatos();
     aux->cargarClientes(clientes, raiz);
     aux->agregarTransacciones(clientes, raiz);
-    menu(raiz,clientes);
+    aux->explorarOrdenar(clientes);
+    aux1 = clientes.front()->listaTransac;
+    while(!aux1.empty())
+    {
+        cout<<aux1.front()->id<<endl;
+        aux1.pop();
+    }
 }

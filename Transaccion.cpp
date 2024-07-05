@@ -49,3 +49,7 @@ int Transaccion::getMonto()
 {
     return this->monto;
 }
+string Transaccion::getFecha()
+{
+    return this->fecha;
+}

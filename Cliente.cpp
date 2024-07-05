@@ -2,6 +2,8 @@
 #include <queue>
 #include <stack>
 #include <vector>
+#include <string>
+#include <climits>
 #include "Cliente.h"
 #include "Nodo.h"
 
@@ -28,6 +30,7 @@ void Cliente::agregarSospecha(Transaccion* datos)
     {
         this->listaSospechosa.push(datos);
     }
+    //cout<<this->listaSospechosa.front()->id<<endl;
 }
 
 void Cliente::setListaTransac(Transaccion* datos)
@@ -41,6 +44,7 @@ void Cliente::setListaTransac(Transaccion* datos)
     {
         this->listaTransac.push(datos);
     }
+    //cout<<this->listaTransac.front()->id<<endl;
 }
 
 void sospechaTiempo(Transaccion* ant1, Transaccion* ant2, Transaccion* datos)
@@ -61,43 +65,41 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
     string hora;
     stringstream datosSeparar(datos->hora);
     getline(datosSeparar, hora, ':');
-    queue<Transaccion*> aux = cliente->getListaTransac();
-    stack<Transaccion*> aux1;
+    // queue<Transaccion*> aux = cliente->getListaTransac();
+    // stack<Transaccion*> aux1;
 
     if(datos->monto >= 1000000)
     {
         datos->setSospechosa("Cantidad de Monto demasiado alta");
         cliente->agregarSospecha(datos);
-        return true; 
     }
     else if(stoi(hora) < 2)
     {
         datos->setSospechosa("Hora de transacción poco habitual");
         cliente->agregarSospecha(datos);
-        return true;
     }
-    else if(cliente->getListaTransac().size() > 1)
-    {
-        Transaccion* ant1;
-        Transaccion* ant2;
+    // else if(cliente->getListaTransac().size() > 1)
+    // {
+    //     Transaccion* ant1;
+    //     Transaccion* ant2;
         
-        while(!aux.empty())
-        {
-            aux1.push(aux.front());
-            aux.pop();
-        }
+    //     while(!aux.empty())
+    //     {
+    //         aux1.push(aux.front());
+    //         aux.pop();
+    //     }
 
-        ant1 = aux1.top(); aux1.pop();
-        ant2 = aux1.top(); aux1.pop();
+    //     ant1 = aux1.top(); aux1.pop();
+    //     ant2 = aux1.top(); aux1.pop();
 
-        while(!aux1.empty()) {aux1.pop();}
+    //     while(!aux1.empty()) {aux1.pop();}
 
-        if(ant1->fecha == datos->fecha && ant2->fecha == datos->fecha)
-        {
-            sospechaTiempo(ant1, ant2, datos);
-        }
+    //     if(ant1->fecha == datos->fecha && ant2->fecha == datos->fecha)
+    //     {
+    //         sospechaTiempo(ant1, ant2, datos);
+    //     }
 
-    }
+    // }
     cliente->setListaTransac(datos);
     // if(cliente->getListaTransac().size() > 1)
     // {
@@ -120,6 +122,71 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
 
     return false;
 }
+
+bool compareDates(const string& date1, const string& date2) 
+{
+    return date1 <= date2;
+}
+
+void Cliente::ordenarQueue(queue<Transaccion*>& transacciones) 
+{
+    if(transacciones.front() == nullptr)
+    {
+        //transacciones.pop();
+        //cout<<transacciones.front()->rutFinal<<endl;
+        cout<<"x"<<endl;
+    }
+    int n = transacciones.size();
+    for (int i = 0; i < n; ++i) 
+    {
+        int min_index = -1;
+        Transaccion* min_value = new Transaccion(0,"","",0,"","9999-12-31","");
+        int current_size = transacciones.size();
+
+        for (int j = 0; j < current_size; ++j) 
+        {
+            Transaccion* curr = transacciones.front();
+            transacciones.pop();
+            if (compareDates(curr->fecha, min_value->fecha) && j <= (n - i - 1)) 
+            {
+                min_value = curr;
+                min_index = j;
+            }
+
+            transacciones.push(curr);
+        }
+
+        for (int j = 0; j < current_size; ++j) 
+        {
+            Transaccion* curr = transacciones.front();
+            transacciones.pop();
+
+            if (!(curr->fecha == min_value->fecha && j == min_index)) 
+            {
+                transacciones.push(curr);
+            }
+        }
+
+        transacciones.push(min_value);
+    }
+}
+
+void Cliente::explorarOrdenar(queue<Cliente*>& clientes)
+{
+    queue<Cliente*> aux;
+    while(!clientes.empty())
+    {
+        ordenarQueue(clientes.front()->listaTransac);
+        aux.push(clientes.front());
+        clientes.pop();
+    }
+    while(!aux.empty())
+    {
+        clientes.push(aux.front());
+        aux.pop();
+    }
+}
+
 //ordenar cada que agregamos una transferencia
 void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
 {
@@ -216,14 +283,14 @@ void Cliente::agregarTransaccion(queue<Cliente*>& clientes, Transaccion* datos, 
     {
         if(clientes.front()->rut == rut)
         {
-            if(clientes.front()->getListaTransac().front() == nullptr)
+            if(clientes.front()->listaTransac.front() == nullptr)
             {
-                clientes.front()->getListaTransac().pop();
-                clientes.front()->getListaTransac().push(datos);
+                clientes.front()->listaTransac.pop();
+                clientes.front()->listaTransac.push(datos);
             }
             else
             {
-                clientes.front()->getListaTransac().push(datos);
+                clientes.front()->listaTransac.push(datos);
             }
         }
         aux.push(clientes.front());
@@ -263,10 +330,6 @@ bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 queue<Transaccion*> Cliente::getListaSospechosa()
 {
     return this->listaSospechosa;
-}
-queue<Transaccion*> Cliente::getListaTransac()
-{
-    return this->listaTransac;
 }
 
 

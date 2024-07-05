@@ -23,5 +23,6 @@ class Transaccion
         Transaccion* subirTransacciones(string);
         void setSospechosa(string);
         int getMonto();
+        string getFecha();
 };
 
