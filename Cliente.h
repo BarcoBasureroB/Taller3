@@ -23,4 +23,6 @@ class Cliente
         void agregarTransaccion(queue<Cliente*>& , Transaccion* , string);
         queue<Transaccion*> getListaSospechosa();
         queue<Transaccion*> getListaTransac();
+        
+        void agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz);
 };

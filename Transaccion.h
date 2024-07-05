@@ -22,5 +22,6 @@ class Transaccion
         ~Transaccion();
         Transaccion* subirTransacciones(string);
         void setSospechosa(string);
+        int getMonto();
 };
 

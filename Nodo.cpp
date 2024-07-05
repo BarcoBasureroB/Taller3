@@ -76,11 +76,10 @@ Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos)
     if (!nodo) {return new Nodo(datos);}
 
     if (datos->id < nodo->datos->id) {nodo->izquierda = insertar(nodo->izquierda, datos);}
-
+    
     else if (datos->id > nodo->datos->id){nodo->derecha = insertar(nodo->derecha, datos);}
 
     else {return nodo;}
-
     nodo->alturaNodo = 1 + max(altura(nodo->izquierda), altura(nodo->derecha));
 
     int balance = obtenerBalance(nodo);
