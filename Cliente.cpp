@@ -16,6 +16,7 @@ Cliente::Cliente(string rut)
 
 Cliente::~Cliente(){}
 
+
 void Cliente::agregarSospecha(Transaccion* datos)
 {
     if(listaSospechosa.front() == nullptr)
@@ -29,14 +30,28 @@ void Cliente::agregarSospecha(Transaccion* datos)
     }
 }
 
+void Cliente::setListaTransac(Transaccion* datos)
+{
+    if(this->listaTransac.front() == nullptr)
+    {
+        this->listaTransac.pop();
+        this->listaTransac.push(datos);
+    }
+    else
+    {
+        this->listaTransac.push(datos);
+    }
+}
+
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
 {
     if(datos->monto >= 1000000)
     {
         datos->setSospechosa("Cantidad de Monto demasiado alta");
         cliente->agregarSospecha(datos);
-        return true;
+        return true; 
     }
+    cliente->setListaTransac(datos);
     // if(cliente->getListaTransac().size() > 1)
     // {
     //     queue<Transaccion*> aux;
@@ -59,16 +74,36 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
     return false;
 }
 
-// void
+void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
+{
+    if(raiz == nullptr)
+    {
+        return;
+    }
 
-// void Cliente::agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz)
-// {
-//     queue<Cliente*> aux;
-//     while(!clientes.empty())
-//     {
+    buscarTransacciones(cliente, raiz->izquierda);
+    if(cliente->rut == raiz->datos->rutFinal || cliente->rut == raiz->datos->rutOrigen)
+    {
+        confirmarTransferenciaSospechosa(cliente, raiz->datos);
+    }
+    buscarTransacciones(cliente, raiz->derecha);
+}
 
-//     }
-// }
+void Cliente::agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz)
+{
+    queue<Cliente*> aux;
+    while(!clientes.empty())
+    {
+        buscarTransacciones(clientes.front(), raiz);
+        aux.push(clientes.front());
+        clientes.pop();
+    }
+    while(!aux.empty())
+    {
+        clientes.push(aux.front());
+        aux.pop();
+    }
+}
 
 void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
 {
@@ -93,21 +128,11 @@ void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
                 Cliente* nuevoCliente = new Cliente(actual->datos->rutOrigen);
                 clientes.push(nuevoCliente);
             }
-            else
-            {
-                Cliente* nuevoCliente = new Cliente(actual->datos->rutOrigen);
-                clientes.push(nuevoCliente);
-            }
             
             if(buscarRut(clientes, actual->datos->rutFinal))
             {
                 Cliente* nuevoCliente = new Cliente(actual->datos->rutFinal);
                 clientes.push(nuevoCliente);
-            }
-            else
-            {
-                Cliente* nuevoCliente = new Cliente(actual->datos->rutFinal);
-                clientes.push(nuevoCliente);    
             }
 
             pila.pop();
@@ -174,8 +199,9 @@ queue<Transaccion*> Cliente::getListaSospechosa()
 {
     return this->listaSospechosa;
 }
-
 queue<Transaccion*> Cliente::getListaTransac()
 {
     return this->listaTransac;
 }
+
+

@@ -218,10 +218,9 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 
     Transaccion* nuevaTransaccion = new Transaccion(id, rutOrigen, rutDestino, monto, ubicacion, fecha, hora);
 
-    arbolDeDecision(clientes,raiz);
-
     raiz = aux->insertar(raiz, nuevaTransaccion);
 
+    arbolDeDecision(clientes,raiz);
     
 }
 
@@ -344,6 +343,6 @@ int main()
     queue<Cliente*> clientes;
     raiz = cargarDatos();
     aux->cargarClientes(clientes, raiz);
-
+    aux->agregarTransacciones(clientes, raiz);
     menu(raiz,clientes);
 }
