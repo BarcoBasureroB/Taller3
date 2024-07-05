@@ -12,6 +12,7 @@ class Cliente
     public:
         string rut;
         queue<Transaccion*> listaSospechosa;
+        queue<Transaccion*> listaTransac;
 
         Cliente(string);
         ~Cliente();
@@ -19,5 +20,7 @@ class Cliente
         bool buscarRut(queue<Cliente*>, string);
         bool confirmarTransferenciaSospechosa(Cliente*&, Transaccion*);
         void agregarSospecha(Transaccion*);
+        void agregarTransaccion(queue<Cliente*>& , Transaccion* , string);
         queue<Transaccion*> getListaSospechosa();
+        queue<Transaccion*> getListaTransac();
 };

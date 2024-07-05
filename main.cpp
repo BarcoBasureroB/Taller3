@@ -198,10 +198,10 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     string rutOrigen, rutDestino, ubicacion, fecha, hora;
     int monto;
     cout<<"Ingrese los siguientes datos: "<<endl;
-    cout<<"RUT de origen: "<<endl;
+    cout<<"RUT de origen: (Ej: 12345678-9)"<<endl;
     cin>>rutOrigen;
 
-    cout<<"RUT de destino: "<<endl;
+    cout<<"RUT de destino: (Ej: 12345678-9)"<<endl;
     cin>>rutDestino;
 
     cout<<"Monto recibido (Ej: 100000):"<<endl;
@@ -210,17 +210,19 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     cout<<"Ubicación de Transferencia: "<<endl;
     cin>>ubicacion;
 
-    cout<<"Fecha de Transacción: "<<endl;
+    cout<<"Fecha de Transacción: (Ej: 2024-07-03)"<<endl;
     cin>>fecha;
 
-    cout<<"Hora de Transacción (Ej:): "<<endl;
+    cout<<"Hora de Transacción (Ej: 14:10): "<<endl;
     cin>>hora;
 
-    Transaccion* nuevaTransaccion = new Transaccion(crearIDRandom(raiz), rutOrigen, rutDestino, monto, ubicacion, fecha, hora);
+    Transaccion* nuevaTransaccion = new Transaccion(id, rutOrigen, rutDestino, monto, ubicacion, fecha, hora);
 
     raiz = aux->insertar(raiz, nuevaTransaccion);
 
     arbolDeDecision(clientes,raiz);
+
+
 }
 
 void revisarTransacciones(Nodo* &raiz)
@@ -308,7 +310,7 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
     return 0;
 }
 
-Nodo* cargarDatos()
+Nodo* cargarDatos(queue<Cliente*> &clientes)
 {
     Nodo* aux1;
     Nodo* raiz;
@@ -325,10 +327,43 @@ Nodo* cargarDatos()
         cout<<"ERROR! no se pudo leer el archivo eventos."<<endl;
         exit(1);
     }
-
+    Cliente* aux;
     while(getline(datosTransaccion, texto))
     {
-        raiz = aux1->insertar(raiz, aux2->subirTransacciones(texto));
+
+
+        Transaccion* nuevaT = aux2->subirTransacciones(texto);
+        raiz = aux1->insertar(raiz, nuevaT);
+
+        if(aux->buscarRut(clientes, nuevaT->rutOrigen))
+        {
+            //cout<<nuevaT->monto<<endl;
+            Cliente* nuevoCliente = new Cliente(nuevaT->rutOrigen);
+            aux->confirmarTransferenciaSospechosa(nuevoCliente, nuevaT);
+            nuevoCliente->getListaTransac().pop();
+            nuevoCliente->getListaTransac().push(nuevaT);
+            clientes.push(nuevoCliente);
+        }
+        else
+        {
+            cout<<"b"<<endl;
+            aux->agregarTransaccion(clientes, nuevaT, nuevaT->rutOrigen);
+        }
+        if(aux->buscarRut(clientes, nuevaT->rutFinal))
+        {
+            cout<<"c"<<endl;
+            Cliente* nuevoCliente = new Cliente(nuevaT->rutFinal);
+            aux->confirmarTransferenciaSospechosa(nuevoCliente, nuevaT);
+            nuevoCliente->getListaTransac().pop();  
+            nuevoCliente->getListaTransac().push(nuevaT);                                                                       
+            clientes.push(nuevoCliente);
+        }
+        else
+        {
+            cout<<"d"<<endl;
+            aux->agregarTransaccion(clientes, nuevaT, nuevaT->rutFinal);
+        }
+
     }
     datosTransaccion.close();
     
@@ -339,8 +374,15 @@ int main()
 {
     Cliente* aux;
     Nodo* raiz = nullptr;
-    raiz = cargarDatos();
     queue<Cliente*> clientes;
-    aux->cargarClientes(clientes, raiz);
-    menu(raiz,clientes);
+    raiz = cargarDatos(clientes);
+    cout<<clientes.size()<<endl;
+    
+    // while(!clientes.empty())
+    // {
+    //     cout<<"n"<<endl;
+    //     //cout<<clientes.front()->getListaTransac().front()->monto<<endl;
+    //     clientes.pop();
+    // }
+    //menu(raiz,clientes);
 }

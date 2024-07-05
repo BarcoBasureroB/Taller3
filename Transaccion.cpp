@@ -32,7 +32,7 @@ Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
     getline(datosSeparar, ubicacion, ',');
     getline(datosSeparar, fecha, ',');
     getline(datosSeparar, hora, ',');
-
+    cout<<stoi(monto)<<endl;
     Transaccion* nuevaTransaccion = new Transaccion(stoi(id), cuentaOrigen, cuentaDestino, stoi(monto), ubicacion, fecha, hora);
     return nuevaTransaccion;
 }

@@ -11,6 +11,7 @@ Cliente::Cliente(string rut)
 {
     this -> rut = rut;
     this->listaSospechosa.push(nullptr);
+    this->listaTransac.push(nullptr);
 }
 
 Cliente::~Cliente(){}
@@ -36,48 +37,111 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
         cliente->agregarSospecha(datos);
         return true;
     }
+    if(cliente->getListaTransac().size() > 1)
+    {
+        queue<Transaccion*> aux;
+
+        Transaccion* ultima = cliente->getListaTransac().front();
+        cliente->getListaTransac().pop();
+        Transaccion* penultima = cliente->getListaTransac().front();
+        cliente->getListaTransac().pop();
+
+        if(datos->ubicacion != ultima->ubicacion)
+        {
+
+        }
+        else
+        {
+
+        }
+
+        
+    }
+
     return false;
 }
 
-void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
-{
-    stack<Nodo*> pila;
+// void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
+// {
+//     stack<Nodo*> pila;
     
-    Nodo* actual = raiz;
+//     Nodo* actual = raiz;
  
    
-    while (!pila.empty() || actual != nullptr)
-    {
+//     while (!pila.empty() || actual != nullptr)
+//     {
         
-        if (actual != nullptr)
-        {
-            pila.push(actual);
-            actual = actual->izquierda;
-        }
-        else {
+//         if (actual != nullptr)
+//         {
+//             pila.push(actual);
+//             actual = actual->izquierda;
+//         }
+//         else {
             
-            actual = pila.top();
+//             actual = pila.top();
 
-            if(buscarRut(clientes, actual->datos->rutOrigen))
-            {
-                Cliente* nuevoCliente = new Cliente(actual->datos->rutOrigen);
-                confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);
-                clientes.push(nuevoCliente);
-            }
-            if(buscarRut(clientes, actual->datos->rutFinal))
-            {
-                Cliente* nuevoCliente = new Cliente(actual->datos->rutFinal);
-                confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);                                                                        
-                clientes.push(nuevoCliente);
-            }
+//             if(buscarRut(clientes, actual->datos->rutOrigen))
+//             {
+//                 Cliente* nuevoCliente = new Cliente(actual->datos->rutOrigen);
+//                 confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);
+//                 nuevoCliente->getListaTransac().push(actual->datos);
+//                 clientes.push(nuevoCliente);
+//             }
+//             else
+//             {
+//                 agregarTransaccion(clientes, actual->datos, actual->datos->rutOrigen);
+//             }
+//             if(buscarRut(clientes, actual->datos->rutFinal))
+//             {
+//                 Cliente* nuevoCliente = new Cliente(actual->datos->rutFinal);
+//                 confirmarTransferenciaSospechosa(nuevoCliente, actual->datos);
+//                 nuevoCliente->getListaTransac().push(actual->datos);                                                                        
+//                 clientes.push(nuevoCliente);
+//             }
+//             else
+//             {
+//                 agregarTransaccion(clientes, actual->datos, actual->datos->rutFinal);
+//             }
 
-            pila.pop();
+//             pila.pop();
 
  
-            actual = actual->derecha;
+//             actual = actual->derecha;
+//         }
+//     }
+// }
+
+void Cliente::agregarTransaccion(queue<Cliente*>& clientes, Transaccion* datos, string rut)
+{
+    queue<Cliente*> aux;
+
+    while(!clientes.empty())
+    {
+        if(clientes.front()->rut == rut)
+        {
+            if(clientes.front()->getListaTransac().front() == nullptr)
+            {
+                clientes.front()->getListaTransac().pop();
+                clientes.front()->getListaTransac().push(datos);
+            }
+            else
+            {
+                clientes.front()->getListaTransac().push(datos);
+            }
         }
+        aux.push(clientes.front());
+        clientes.pop();
+
+    }
+
+    while(!aux.empty())
+    {
+        clientes.push(aux.front());
+        aux.pop();
     }
 }
+
+
 bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 {
     if(clientes.empty())
@@ -102,4 +166,9 @@ bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 queue<Transaccion*> Cliente::getListaSospechosa()
 {
     return this->listaSospechosa;
+}
+
+queue<Transaccion*> Cliente::getListaTransac()
+{
+    return this->listaTransac;
 }
