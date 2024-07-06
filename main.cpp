@@ -172,25 +172,6 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
     }
 }
 
-void arbolDeDecision(queue<Cliente*> &clientes, Nodo* &raiz)
-{
-    Cliente* aux;
-
-    if(raiz == nullptr){
-        return;
-    }
-
-    arbolDeDecision(clientes, raiz->izquierda);
-    
-    
-    if(raiz->datos->monto >= 1000000)
-    {  
-        raiz->datos->sospechosa = "Cantidad de Monto demasiado alta.";
-    }
-
-    arbolDeDecision(clientes, raiz->derecha);
-}
-
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     Cliente* aux2;
@@ -385,15 +366,18 @@ int main()
     string actualizacion = "";
     Transaccion* auxActualizacion;
     queue<Transaccion*> aux1;
-    Cliente* aux;
+    Cliente* auxCliente;
+    Nodo* auxNodo;
     Nodo* raiz = nullptr;
     queue<Cliente*> clientes;
     raiz = cargarDatos();
-    aux->cargarClientes(clientes, raiz);
-    aux->agregarTransacciones(clientes, raiz);
-    aux->explorarOrdenar(clientes);
+    auxCliente->cargarClientes(clientes, raiz);
+    auxCliente->agregarTransacciones(clientes, raiz);
+    auxCliente->explorarOrdenar(clientes);
     menu(raiz, clientes);
     raiz->cantidadNodos(raiz, cantidadNodos);
     actualizarDatos(raiz, cantidadNodos, saltosDeLinea, actualizacion);
     auxActualizacion->actualizarDatosTransacciones(actualizacion);
+    auxNodo->vaciarAVL(raiz);
+    auxCliente->vaciarPila(clientes);
 }

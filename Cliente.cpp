@@ -359,4 +359,10 @@ queue<Transaccion*> Cliente::getListaSospechosa()
     return this->listaSospechosa;
 }
 
-
+void Cliente::vaciarPila(queue<Cliente*>& clientes)
+{
+    while(!clientes.empty())
+    {
+        clientes.pop();
+    }
+}

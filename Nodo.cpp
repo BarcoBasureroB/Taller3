@@ -94,6 +94,17 @@ Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos)
 
     return nodo;
 }
+void Nodo::vaciarAVL(Nodo*& raiz) 
+{
+    if (!raiz)
+        return;
+
+    vaciarAVL(raiz->izquierda);
+    vaciarAVL(raiz->derecha);
+
+    delete raiz;
+    raiz = nullptr;
+}
 void Nodo::cantidadNodos(Nodo* raiz, int& suma)
 {
     if(raiz == nullptr)
