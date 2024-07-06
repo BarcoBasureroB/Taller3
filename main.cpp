@@ -1,6 +1,7 @@
 #include <iostream>
 #include <queue>
 #include <vector>
+#include <limits>
 #include "Nodo.h"
 #include "Transaccion.h"
 #include "Cliente.h"
@@ -208,8 +209,10 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     cout<<"Monto recibido (Ej: 100000):"<<endl;
     cin>>monto;
 
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
     cout<<"Ubicación de Transferencia: "<<endl;
-    cin>>ubicacion;
+    getline(cin, ubicacion);
 
     cout<<"Fecha de Transacción: (Ej: 2024-07-03)"<<endl;
     cin>>fecha;

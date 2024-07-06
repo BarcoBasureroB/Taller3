@@ -30,7 +30,6 @@ void Cliente::agregarSospecha(Transaccion* datos)
     {
         this->listaSospechosa.push(datos);
     }
-    //cout<<this->listaSospechosa.front()->id<<endl;
 }
 
 void Cliente::setListaTransac(Transaccion* datos)
@@ -42,20 +41,10 @@ void Cliente::setListaTransac(Transaccion* datos)
     }
     else
     {
-        //cout<<datos->monto<<endl;
         this->listaTransac.push(datos);
     }
-    //cout<<this->listaTransac.front()->id<<endl;
 }
 
-// void compararTransacciones(queue<Transaccion*>& transac)
-// {
-//     queue<Transaccion*> aux;
-//     while()
-//     {
-
-//     }
-// }
 
 Transaccion* sospechaTiempo(queue<Transaccion*>& transacciones, Transaccion*& datos, int hora, int minutos)
 {
@@ -135,7 +124,6 @@ Transaccion* sospechaTiempo(queue<Transaccion*>& transacciones, Transaccion*& da
     return sus;
 }
 
-//ordenar lista de transacciones despues de meter todas las transacciones
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
 {
     string hora, minutos;
@@ -227,7 +215,6 @@ void Cliente::explorarOrdenar(queue<Cliente*>& clientes)
     }
 }
 
-//ordenar cada que agregamos una transferencia
 void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
 {
     if(raiz == nullptr)
@@ -242,6 +229,7 @@ void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
     }
     buscarTransacciones(cliente, raiz->derecha);
 }
+
 void Cliente::agregarTransaccionClienteExistente(queue<Cliente*>& clientes, Transaccion* transaccion, string rut)
 {
     queue<Cliente*> aux;
@@ -344,7 +332,6 @@ void Cliente::agregarTransaccion(queue<Cliente*>& clientes, Transaccion* datos, 
         aux.pop();
     }
 }
-
 
 bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 {

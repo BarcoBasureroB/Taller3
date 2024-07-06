@@ -95,12 +95,7 @@ Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos)
     return nodo;
 }
 
-void Nodo::recorridoPreorden(Nodo* raiz)
+string Nodo::datosTransferencia()
 {
-    if (raiz) 
-    {
-        cout << raiz->datos << " ";
-        recorridoPreorden(raiz->izquierda);
-        recorridoPreorden(raiz->derecha);
-    }
+    return 
 }
