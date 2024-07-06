@@ -40,6 +40,13 @@ Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
     return nuevaTransaccion;
 }
 
+void Transaccion::actualizarDatosTransacciones(string transferenciasActualizacion)
+{
+    ofstream datosTransferencias("Transferencias.txt");
+    datosTransferencias << transferenciasActualizacion;
+    datosTransferencias.close();
+}
+
 void Transaccion::setSospechosa(string sospechosa)
 {
     this->sospechosa = sospechosa;

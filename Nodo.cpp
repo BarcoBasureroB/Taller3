@@ -94,3 +94,14 @@ Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos)
 
     return nodo;
 }
+void Nodo::cantidadNodos(Nodo* raiz, int& suma)
+{
+    if(raiz == nullptr)
+    {
+        return;
+    }
+    
+    cantidadNodos(raiz->izquierda, suma);
+    suma++;
+    cantidadNodos(raiz->derecha, suma);
+}

@@ -361,11 +361,14 @@ Nodo* cargarDatos()
 
 int main()
 {
+    int a =0;
     queue<Transaccion*> aux1;
     Cliente* aux;
     Nodo* raiz = nullptr;
     queue<Cliente*> clientes;
     raiz = cargarDatos();
+    raiz->cantidadNodos(raiz, a);
+    cout<<a<<endl;
     aux->cargarClientes(clientes, raiz);
     aux->agregarTransacciones(clientes, raiz);
     aux->explorarOrdenar(clientes);

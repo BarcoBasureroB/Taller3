@@ -20,4 +20,5 @@ class Nodo
         Nodo* rotacionDerechaIzquierda(Nodo* z);
         int obtenerBalance(Nodo* N);
         Nodo* insertar(Nodo* nodo, Transaccion* datos);
+        void cantidadNodos(Nodo*, int&);
 };

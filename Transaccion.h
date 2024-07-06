@@ -21,6 +21,7 @@ class Transaccion
         Transaccion(int, string, string, int, string, string, string);
         ~Transaccion();
         Transaccion* subirTransacciones(string);
+        void actualizarDatosTransacciones(string);
         void setSospechosa(string);
         int getMonto();
         string getFecha();
