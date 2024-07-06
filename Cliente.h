@@ -28,5 +28,5 @@ class Cliente
         void agregarTransaccionClienteExistente(queue<Cliente*>&, Transaccion*, string);
         void ordenarQueue(queue<Transaccion*>&);
         void explorarOrdenar(queue<Cliente*>&);
-        void vaciarPila(queue<Cliente*>&);
+        void vaciarCola(queue<Cliente*>&);
 };
