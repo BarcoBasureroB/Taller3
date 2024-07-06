@@ -53,3 +53,8 @@ string Transaccion::getFecha()
 {
     return this->fecha;
 }
+string Transaccion::datosTransaccion()
+{
+    return to_string(this->id) + "," + this->rutOrigen + "," + this->rutFinal 
+    + "," + to_string(this->monto) + "," + this->ubicacion + "," + this->fecha + "," + this->hora;
+}

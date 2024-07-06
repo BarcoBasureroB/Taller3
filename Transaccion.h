@@ -24,5 +24,6 @@ class Transaccion
         void setSospechosa(string);
         int getMonto();
         string getFecha();
+        string datosTransaccion();
 };
 

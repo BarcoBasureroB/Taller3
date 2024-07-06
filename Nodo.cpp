@@ -94,8 +94,3 @@ Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos)
 
     return nodo;
 }
-
-string Nodo::datosTransferencia()
-{
-    return 
-}
