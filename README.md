@@ -69,7 +69,7 @@ queue<Transaccion*> Cliente::getListaSospechosa();
 // Método para obtener la lista de transacciones sospechosas del cliente.
 
 void Cliente::vaciarCola(queue<Cliente*>& clientes);
-// Función para vaciar una cola
+// Función para vaciar una cola.
 
 
 Transacción:
@@ -142,6 +142,9 @@ Nodo:
 
 Nodo(int key, Producto* value);
 //Constructor de Nodo.
+
+Nodo::~Nodo();
+//Destructor de la clase Nodo.
 
 int Nodo::altura(Nodo* N);
 // Método para obtener la altura de un nodo. Si el nodo es nulo, retorna 0.

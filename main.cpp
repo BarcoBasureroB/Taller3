@@ -12,6 +12,7 @@
 
 using namespace std;
 
+// Realiza una búsqueda recursiva en el árbol binario.
 Nodo* busquedaRec(Nodo* &raiz, int datoABuscar)
 {
     if(!raiz) {return nullptr;}
@@ -23,6 +24,7 @@ Nodo* busquedaRec(Nodo* &raiz, int datoABuscar)
     return busquedaRec(raiz->derecha,datoABuscar);
 }
 
+// Recorre el árbol binario en orden (in-order) de forma recursiva.
 void inOrdenRecursivo(Nodo* &raiz)
 {
     if(raiz == nullptr){
@@ -34,6 +36,7 @@ void inOrdenRecursivo(Nodo* &raiz)
     inOrdenRecursivo(raiz->derecha);
 }
 
+// Genera un ID aleatorio único para una transacción.
 int crearIDRandom(Nodo* &raiz)
 {   
     bool existe = false;
@@ -60,6 +63,7 @@ int crearIDRandom(Nodo* &raiz)
     return idRandom;
 }
 
+// Verifica si un RUT específico existe en la cola de clientes.
 bool datoExiste(string rutSelect, queue<Cliente*> clientes)
 {
     while(!clientes.empty())
@@ -73,6 +77,7 @@ bool datoExiste(string rutSelect, queue<Cliente*> clientes)
     return false;
 }
 
+// Verifica si un ID específico existe en una cola de transacciones.
 bool idExiste(int id, queue<Transaccion*> listaSus)
 {
     queue<Transaccion*> aux = listaSus;
@@ -87,6 +92,7 @@ bool idExiste(int id, queue<Transaccion*> listaSus)
     return false;
 }
 
+// Función para mostrar y revisar las transacciones sospechosas de un cliente.
 void transaccionesSospechosas(queue<Cliente*> &clientes)
 {
     string rutSelect;
@@ -172,6 +178,7 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
     }
 }
 
+// Crea una nueva transacción y la agrega al árbol y a la cola de clientes.
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     Cliente* aux2 = nullptr;
@@ -226,6 +233,7 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     }
 }
 
+// Permite revisar las transacciones en el árbol buscando por ID.
 void revisarTransacciones(Nodo* &raiz)
 {
     int opcion, opcion2;
@@ -278,6 +286,7 @@ void revisarTransacciones(Nodo* &raiz)
     }while(opcion2 != 1);
 }
 
+// Menú principal del programa para realizar diferentes operaciones.
 int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 {
     int opcion;
@@ -312,6 +321,7 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
     return 0;
 }
 
+// Carga las transacciones desde un archivo de texto y las inserta en el árbol.
 Nodo* cargarDatos()
 {
     Nodo* aux1 = nullptr;
@@ -339,6 +349,7 @@ Nodo* cargarDatos()
     return raiz;
 }
 
+// Función para actualizar datos de las transacciones.
 void actualizarDatos(Nodo* raiz, int cantidadNodos, int& saltosDeLinea, string& actualizacionTransferencias)
 {
     if(raiz == nullptr)
@@ -359,6 +370,7 @@ void actualizarDatos(Nodo* raiz, int cantidadNodos, int& saltosDeLinea, string& 
     actualizarDatos(raiz->derecha, cantidadNodos, saltosDeLinea, actualizacionTransferencias);
 }
 
+// Función principal del programa.
 int main()
 {
     int cantidadNodos = 0, saltosDeLinea = 0;

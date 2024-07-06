@@ -17,9 +17,10 @@ Transaccion::Transaccion(int id, string rutOrigen, string rutFinal, int monto, s
     this -> sospechosa = "";
 }
 
-//Destructor de la clase Transaccion
+//Destructor de la clase Transaccion.
 Transaccion::~Transaccion(){}
 
+// Método para crear una nueva transacción.
 Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
 {
     string id, cuentaOrigen, cuentaDestino, monto, ubicacion, fecha, hora;
@@ -40,6 +41,7 @@ Transaccion* Transaccion::subirTransacciones(string datosTransaccion)
     return nuevaTransaccion;
 }
 
+// Actualiza los datos del txt.
 void Transaccion::actualizarDatosTransacciones(string transferenciasActualizacion)
 {
     ofstream datosTransferencias("Transferencias.txt");
@@ -47,19 +49,25 @@ void Transaccion::actualizarDatosTransacciones(string transferenciasActualizacio
     datosTransferencias.close();
 }
 
+// Método para establecer el valor de la variable "sospechosa" de una transacción.
 void Transaccion::setSospechosa(string sospechosa)
 {
     this->sospechosa = sospechosa;
 }
 
+// Método para obtener el monto de la transacción.
 int Transaccion::getMonto()
 {
     return this->monto;
 }
+
+// Método para obtener la fecha de la transacción.
 string Transaccion::getFecha()
 {
     return this->fecha;
 }
+
+// Método para obtener los datos de la transacción.
 string Transaccion::datosTransaccion()
 {
     return to_string(this->id) + "," + this->rutOrigen + "," + this->rutFinal 

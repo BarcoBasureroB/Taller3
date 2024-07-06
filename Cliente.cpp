@@ -16,9 +16,10 @@ Cliente::Cliente(string rut)
     this->listaTransac.push(nullptr);
 }
 
+// Destructor de la clase Cliente.
 Cliente::~Cliente(){}
 
-
+// Método para agregar una transacción sospechosa a la lista de sospechas del cliente.
 void Cliente::agregarSospecha(Transaccion* datos)
 {
     if(listaSospechosa.front() == nullptr)
@@ -32,6 +33,7 @@ void Cliente::agregarSospecha(Transaccion* datos)
     }
 }
 
+// Método para agregar una transacción a la lista de transacciones del cliente.
 void Cliente::setListaTransac(Transaccion* datos)
 {
     if(this->listaTransac.front() == nullptr)
@@ -45,7 +47,7 @@ void Cliente::setListaTransac(Transaccion* datos)
     }
 }
 
-
+// Función que evalúa si una transacción es sospechosa en función del tiempo y la ubicación. (Si es mayor a $1000000 es sospechosa, si ocurre un el mismo lugar y suma más de $1000000 en menos de una hora es sospechosa, y si suma más de $1000000 en 2 horas y ocurre en lugares distintos, también es sospechosa).
 Transaccion* sospechaTiempo(queue<Transaccion*>& transacciones, Transaccion*& datos, int hora, int minutos)
 {
     Transaccion* sus = nullptr;
@@ -124,6 +126,7 @@ Transaccion* sospechaTiempo(queue<Transaccion*>& transacciones, Transaccion*& da
     return sus;
 }
 
+// Método para confirmar si una transacción es sospechosa basándose en varios criterios.
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
 {
     string hora, minutos;
@@ -153,11 +156,14 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
     return false;
 }
 
+// Función para comparar dos fechas.
+// Devuelve verdadero si la primera fecha es menor o igual que la segunda.
 bool compareDates(const string& date1, const string& date2) 
 {
     return date1 <= date2;
 }
 
+// Método para ordenar una cola de transacciones en orden cronológico.
 void Cliente::ordenarQueue(queue<Transaccion*>& transacciones) 
 {
     int n = transacciones.size();
@@ -195,6 +201,7 @@ void Cliente::ordenarQueue(queue<Transaccion*>& transacciones)
     }
 }
 
+// Método para ordenar las colas de transacciones y sospechas de cada cliente.
 void Cliente::explorarOrdenar(queue<Cliente*>& clientes)
 {
     queue<Cliente*> aux;
@@ -215,6 +222,7 @@ void Cliente::explorarOrdenar(queue<Cliente*>& clientes)
     }
 }
 
+// Método para buscar transacciones de un cliente en un árbol y verificar si son sospechosas.
 void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
 {
     if(raiz == nullptr)
@@ -230,6 +238,7 @@ void Cliente::buscarTransacciones(Cliente*& cliente, Nodo* raiz)
     buscarTransacciones(cliente, raiz->derecha);
 }
 
+// Método para agregar una transacción a un cliente existente.
 void Cliente::agregarTransaccionClienteExistente(queue<Cliente*>& clientes, Transaccion* transaccion, string rut)
 {
     queue<Cliente*> aux;
@@ -249,6 +258,7 @@ void Cliente::agregarTransaccionClienteExistente(queue<Cliente*>& clientes, Tran
     }
 }
 
+// Método para agregar transacciones de un árbol a todos los clientes en una cola.
 void Cliente::agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz)
 {
     queue<Cliente*> aux;
@@ -265,6 +275,7 @@ void Cliente::agregarTransacciones(queue<Cliente*>& clientes, Nodo* raiz)
     }
 }
 
+// Método para cargar clientes desde un árbol a una pila.
 void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
 {
     stack<Nodo*> pila;
@@ -303,6 +314,7 @@ void Cliente::cargarClientes(queue<Cliente*>& clientes, Nodo* raiz)
     }
 }
 
+// Método para agregar una transacción a un cliente específico en una cola de clientes.
 void Cliente::agregarTransaccion(queue<Cliente*>& clientes, Transaccion* datos, string rut)
 {
     queue<Cliente*> aux;
@@ -333,6 +345,7 @@ void Cliente::agregarTransaccion(queue<Cliente*>& clientes, Transaccion* datos, 
     }
 }
 
+// Método para buscar si un RUT ya está presente en una cola de clientes.
 bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
 {
     if(clientes.empty())
@@ -354,11 +367,13 @@ bool Cliente::buscarRut(queue<Cliente*> clientes, string rut)
     return true;
 }
 
+// Método para obtener la lista de transacciones sospechosas del cliente.
 queue<Transaccion*> Cliente::getListaSospechosa()
 {
     return this->listaSospechosa;
 }
 
+// Función para vaciar una cola.
 void Cliente::vaciarCola(queue<Cliente*>& clientes)
 {
     while(!clientes.empty())
