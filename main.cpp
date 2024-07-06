@@ -174,9 +174,8 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
 
 void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
 {
-    Cliente* aux2;
-    Nodo* aux;
-    queue<Cliente*> aux1;
+    Cliente* aux2 = nullptr;
+    Nodo* aux = nullptr;
     int id = crearIDRandom(raiz);
     string rutOrigen, rutDestino, ubicacion, fecha, hora;
     int monto;
@@ -315,9 +314,9 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 
 Nodo* cargarDatos()
 {
-    Nodo* aux1;
+    Nodo* aux1 = nullptr;
     Nodo* raiz;
-    Transaccion* aux2;
+    Transaccion* aux2 = nullptr;
 
     string texto;
     
@@ -364,10 +363,9 @@ int main()
 {
     int cantidadNodos = 0, saltosDeLinea = 0;
     string actualizacion = "";
-    Transaccion* auxActualizacion;
-    queue<Transaccion*> aux1;
-    Cliente* auxCliente;
-    Nodo* auxNodo;
+    Transaccion* auxActualizacion = nullptr;
+    Cliente* auxCliente =nullptr;
+    Nodo* auxNodo = nullptr;
     Nodo* raiz = nullptr;
     queue<Cliente*> clientes;
     raiz = cargarDatos();
