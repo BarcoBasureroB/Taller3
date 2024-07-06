@@ -73,7 +73,7 @@ int Nodo::obtenerBalance(Nodo* N)
 
 Nodo* Nodo::insertar(Nodo* nodo, Transaccion* datos) 
 {
-    if (!nodo) {return new Nodo(datos);}
+    if (nodo == nullptr) {return new Nodo(datos);}
 
     if (datos->id < nodo->datos->id) {nodo->izquierda = insertar(nodo->izquierda, datos);}
     

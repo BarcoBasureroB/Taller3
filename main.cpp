@@ -37,7 +37,7 @@ void inOrdenRecursivo(Nodo* &raiz)
 int crearIDRandom(Nodo* &raiz)
 {   
     bool existe = false;
-    int idRandom;
+    int idRandom = 0;
     do
     {
         srand(time(0));
@@ -110,7 +110,7 @@ void transaccionesSospechosas(queue<Cliente*> &clientes)
         }
     }while(!datoExiste(rutSelect, clientes));
 
-    Cliente* clientAux;
+    Cliente* clientAux = nullptr;
 
     queue<Cliente*> aux1 = clientes;
 
@@ -315,7 +315,7 @@ int menu(Nodo* &raiz, queue<Cliente*> &clientes)
 Nodo* cargarDatos()
 {
     Nodo* aux1 = nullptr;
-    Nodo* raiz;
+    Nodo* raiz = nullptr;
     Transaccion* aux2 = nullptr;
 
     string texto;
