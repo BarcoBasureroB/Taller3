@@ -169,7 +169,7 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
     // }
     
     cliente->setListaTransac(datos);
-    cout<<datos->hora<<endl;
+    cout<<cliente->listaTransac.back()->hora<<endl;
     return false;
 }
 
