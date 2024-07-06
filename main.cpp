@@ -379,5 +379,5 @@ int main()
     actualizarDatos(raiz, cantidadNodos, saltosDeLinea, actualizacion);
     auxActualizacion->actualizarDatosTransacciones(actualizacion);
     auxNodo->vaciarAVL(raiz);
-    auxCliente->vaciarPila(clientes);
+    auxCliente->vaciarCola(clientes);
 }
