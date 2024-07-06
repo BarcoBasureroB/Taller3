@@ -237,9 +237,9 @@ void crearTransaccion(Nodo* &raiz, queue<Cliente*> &clientes)
     }
     else
     {
-        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutFinal);
+        Cliente* nuevoCliente = new Cliente(nuevaTransaccion->rutOrigen);
         clientes.push(nuevoCliente);
-        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutFinal);
+        aux2->agregarTransaccionClienteExistente(clientes, nuevaTransaccion, nuevaTransaccion->rutOrigen);
     }
 }
 

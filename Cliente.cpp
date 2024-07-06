@@ -42,6 +42,7 @@ void Cliente::setListaTransac(Transaccion* datos)
     }
     else
     {
+        //cout<<datos->monto<<endl;
         this->listaTransac.push(datos);
     }
     //cout<<this->listaTransac.front()->id<<endl;
@@ -56,15 +57,83 @@ void Cliente::setListaTransac(Transaccion* datos)
 //     }
 // }
 
-// void sospechaTiempo(queue<Cliente*>& clientes)
-// {
-//     queue<Cliente*> aux;
-//     while(!clientes.empty())
-//     {
-
-//     }
-
-// }
+Transaccion* sospechaTiempo(queue<Transaccion*>& transacciones, Transaccion*& datos, int hora, int minutos)
+{
+    Transaccion* sus = nullptr;
+    queue<Transaccion*> aux;
+    while(!transacciones.empty())
+    { 
+        if(transacciones.front()->fecha == datos->fecha)
+        {
+            string horaAux, minutosAux;
+            stringstream datosSeparar(transacciones.front()->hora);
+            getline(datosSeparar, horaAux, ':');
+            getline(datosSeparar, minutosAux, ':');
+            if(transacciones.front()->ubicacion == datos->ubicacion)
+            {
+                if((transacciones.front()->monto + datos->monto) >= 1000000)
+                {
+                    if(stoi(horaAux) == hora && minutos > stoi(minutosAux))
+                    {
+                        datos->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = datos;
+                    }
+                    else if(stoi(horaAux) == hora && minutos < stoi(minutosAux))
+                    {
+                        transacciones.front()->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = transacciones.front();
+                    }
+                    else if(stoi(horaAux) == hora-1 && stoi(minutosAux) > minutos)
+                    {
+                        datos->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = datos;
+                    }
+                    else if(hora == stoi(horaAux)-1 && minutos > stoi(minutosAux))
+                    {
+                        transacciones.front()->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = transacciones.front();
+                    }
+                    
+                }
+            }
+            else
+            {
+                if((transacciones.front()->monto + datos->monto) >= 1000000)
+                {
+                    if(stoi(horaAux) == hora && minutos > stoi(minutosAux))
+                    {
+                        datos->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = datos;
+                    }
+                    else if(stoi(horaAux) == hora && minutos < stoi(minutosAux))
+                    {
+                        transacciones.front()->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = transacciones.front();
+                    }
+                    else if(stoi(horaAux) == hora-2 && stoi(minutosAux) > minutos)
+                    {
+                        datos->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = datos;
+                    }
+                    else if(hora == stoi(horaAux)-2 && minutos > stoi(minutosAux))
+                    {
+                        transacciones.front()->setSospechosa("Transacciones en corto periodo de tiempo");
+                        sus = transacciones.front();
+                    }
+                    
+                }
+            }
+        }
+        aux.push(transacciones.front());
+        transacciones.pop();
+    }
+    while(!aux.empty())
+    {
+        transacciones.push(aux.front());
+        aux.pop();
+    }
+    return sus;
+}
 
 //ordenar lista de transacciones despues de meter todas las transacciones
 bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* datos)
@@ -73,8 +142,6 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
     stringstream datosSeparar(datos->hora);
     getline(datosSeparar, hora, ':');
     getline(datosSeparar, minutos, ':');
-    queue<Transaccion*> aux;
-    stack<Transaccion*> aux1;
 
     if(datos->monto >= 1000000)
     {
@@ -86,90 +153,15 @@ bool Cliente::confirmarTransferenciaSospechosa(Cliente* &cliente,Transaccion* da
         datos->setSospechosa("Hora de transacción poco habitual");
         cliente->agregarSospecha(datos);
     }
-
-    // else if(cliente->listaTransac.size() > 0 && cliente->listaTransac.front() != nullptr)
-    // {
-    //     cout<<"a"<<endl;
-    //     while(!cliente->listaTransac.empty())
-    //     {
-    //         cout<<"v"<<endl;
-    //         if(cliente->listaTransac.front()->fecha == datos->fecha)
-    //         {
-    //             cout<<"b"<<endl;
-    //             string horaAux, minutosAux;
-    //             stringstream datosSeparar(cliente->listaTransac.front()->hora);
-    //             getline(datosSeparar, horaAux, ':');
-    //             getline(datosSeparar, minutosAux, ':');
-    //             if(cliente->listaTransac.front()->ubicacion == datos->ubicacion)
-    //             {
-    //                 if((cliente->listaTransac.front()->monto + datos->monto) >= 1000000)
-    //                 {
-    //                     if(horaAux == hora && minutos > minutosAux)
-    //                     {
-    //                         cout<<"c"<<endl;
-    //                         datos->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(datos);
-    //                     }
-    //                     else if(horaAux == hora && minutos < minutosAux)
-    //                     {
-    //                         cliente->listaTransac.front()->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(cliente->listaTransac.front());
-    //                     }
-    //                     else if(stoi(horaAux) == stoi(hora)-1 && minutosAux > minutos)
-    //                     {
-    //                         datos->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(datos);
-    //                     }
-    //                     else if(stoi(hora) == stoi(horaAux)-1 && minutos > minutosAux)
-    //                     {
-    //                         cliente->listaTransac.front()->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(cliente->listaTransac.front());
-    //                     }
-                        
-    //                 }
-    //             }
-    //             else
-    //             {
-    //                 if((cliente->listaTransac.front()->monto + datos->monto) >= 1000000)
-    //                 {
-    //                     if(horaAux == hora && minutos > minutosAux)
-    //                     {
-    //                         cout<<"b"<<endl;
-    //                         datos->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(datos);
-    //                     }
-    //                     else if(horaAux == hora && minutos < minutosAux)
-    //                     {
-    //                         cliente->listaTransac.front()->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(cliente->listaTransac.front());
-    //                     }
-    //                     else if(stoi(horaAux) == stoi(hora)-2 && minutosAux > minutos)
-    //                     {
-    //                         datos->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(datos);
-    //                     }
-    //                     else if(stoi(hora) == stoi(horaAux)-2 && minutos > minutosAux)
-    //                     {
-    //                         cliente->listaTransac.front()->setSospechosa("Transacciones en corto periodo de tiempo");
-    //                         cliente->agregarSospecha(cliente->listaTransac.front());
-    //                     }
-                        
-    //                 }
-    //             }
-    //         }
-    //         aux.push(cliente->listaTransac.front());
-    //         cliente->listaTransac.pop();
-
-    //     }
-    //     while(!aux.empty())
-    //     {
-    //         cliente->setListaTransac(aux.front());
-    //         aux.pop();
-    //     }  
-    // }
-    
+    else if(cliente->listaTransac.size() > 0 && cliente->listaTransac.front() != nullptr)
+    {
+        Transaccion* opcion = sospechaTiempo(cliente->listaTransac, datos, stoi(hora), stoi(minutos));
+        if(opcion != nullptr)
+        {
+            cliente->agregarSospecha(opcion);
+        }
+    }
     cliente->setListaTransac(datos);
-    cout<<cliente->listaTransac.back()->hora<<endl;
     return false;
 }
 
