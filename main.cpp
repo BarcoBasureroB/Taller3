@@ -366,10 +366,5 @@ int main()
     aux->cargarClientes(clientes, raiz);
     aux->agregarTransacciones(clientes, raiz);
     aux->explorarOrdenar(clientes);
-    aux1 = clientes.front()->listaTransac;
-    while(!aux1.empty())
-    {
-        cout<<aux1.front()->id<<endl;
-        aux1.pop();
-    }
+    menu(raiz, clientes);
 }
