@@ -359,18 +359,41 @@ Nodo* cargarDatos()
     return raiz;
 }
 
+void actualizarDatos(Nodo* raiz, int cantidadNodos, int& saltosDeLinea, string& actualizacionTransferencias)
+{
+    if(raiz == nullptr)
+    {
+        return;
+    }
+    
+    actualizarDatos(raiz->izquierda, cantidadNodos, saltosDeLinea, actualizacionTransferencias);
+    saltosDeLinea++;
+    if(saltosDeLinea < cantidadNodos)
+    {
+        actualizacionTransferencias += raiz->datos->datosTransaccion() + "\n";
+    }
+    else
+    {
+        actualizacionTransferencias += raiz->datos->datosTransaccion();
+    }
+    actualizarDatos(raiz->derecha, cantidadNodos, saltosDeLinea, actualizacionTransferencias);
+}
+
 int main()
 {
-    int a =0;
+    int cantidadNodos = 0, saltosDeLinea = 0;
+    string actualizacion = "";
+    Transaccion* auxActualizacion;
     queue<Transaccion*> aux1;
     Cliente* aux;
     Nodo* raiz = nullptr;
     queue<Cliente*> clientes;
     raiz = cargarDatos();
-    raiz->cantidadNodos(raiz, a);
-    cout<<a<<endl;
     aux->cargarClientes(clientes, raiz);
     aux->agregarTransacciones(clientes, raiz);
     aux->explorarOrdenar(clientes);
     menu(raiz, clientes);
+    raiz->cantidadNodos(raiz, cantidadNodos);
+    actualizarDatos(raiz, cantidadNodos, saltosDeLinea, actualizacion);
+    auxActualizacion->actualizarDatosTransacciones(actualizacion);
 }
